@@ -1,6 +1,7 @@
 package org.musicsource.codezillas.server;
 
 import org.musicsource.codezillas.connection.Connection;
+import org.musicsource.codezillas.server.persistence.Store;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
 
@@ -19,14 +20,15 @@ public class Server {
 
     private ServerSocket serverSocket;
     private ExecutorService cachedPool;
-    private Map<Integer,ClientHandler> clientHandlerMap;
-    private Storage storage;
+    private Map<Integer, ConnectionHandler> connectionHandlerMap;
+    private Store store;
     private Integer clientCount;
 
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
-        clientHandlerMap = Collections.synchronizedMap(new HashMap<Integer, ClientHandler>());
-        storage = new Storage();
+        connectionHandlerMap = Collections.synchronizedMap(new HashMap<Integer, ConnectionHandler>());
+        store = new Store();
+        clientCount = 0;
     }
 
     public void init() {
@@ -43,9 +45,11 @@ public class Server {
             try {
                 System.out.println(Messages.WAIT_CONNECTION);
 
-                ClientHandler clientHandler = new ClientHandler(serverSocket.accept(), storage);
+                Socket socket = serverSocket.accept();
+                clientCount++;
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, store);
 
-                clientHandlerMap.put(++clientCount, clientHandler);
+                connectionHandlerMap.put(clientCount, clientHandler);
 
                 cachedPool.submit(clientHandler);
             } catch (IOException e) {
@@ -63,17 +67,17 @@ public class Server {
         }
     }
 
-    private class ClientHandler implements Runnable {
+    private class ConnectionHandler implements Runnable {
 
         private Socket socket;
         private ObjectInputStream inputStream;
         private ObjectOutputStream outputStream;
         private ServerHandler serverHandler;
-        private Storage storage;
+        private Store store;
 
-        public ClientHandler(Socket socket, Storage storage) {
+        public ConnectionHandler(Socket socket, Store store) {
             this.socket = socket;
-            this.storage = storage;
+            this.store = store;
             setupStreams();
             serverHandler = new ServerHandler();
         }
@@ -115,6 +119,7 @@ public class Server {
                 Connection connection = (Connection) object;
 
                 serverHandler.setConnection(connection);
+                serverHandler.setStore(store);
                 serverHandler.handleConnection();
             }
         }

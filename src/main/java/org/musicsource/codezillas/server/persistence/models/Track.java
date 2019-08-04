@@ -1,9 +1,4 @@
-package org.musicsource.codezillas.server.persistence.tracks;
-
-import org.musicsource.codezillas.server.persistence.AbstractModel;
-import org.musicsource.codezillas.server.persistence.User;
-
-import javax.persistence.*;
+package org.musicsource.codezillas.server.persistence.models;
 
 //@Entity
 //@Table(name = "track")

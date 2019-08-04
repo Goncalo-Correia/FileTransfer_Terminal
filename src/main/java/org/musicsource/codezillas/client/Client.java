@@ -75,6 +75,7 @@ public class Client {
         if (object instanceof Connection) {
             Connection connection = (Connection) object;
             clientHandler.setConnection(connection);
+            clientHandler.setPrompt(prompt);
             clientHandler.handleConnection();
         }
     }

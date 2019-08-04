@@ -1,6 +1,4 @@
-package org.musicsource.codezillas.server.persistence;
-
-import javax.persistence.*;
+package org.musicsource.codezillas.server.persistence.models;
 
 //@MappedSuperclass
 public abstract class AbstractModel implements Model {

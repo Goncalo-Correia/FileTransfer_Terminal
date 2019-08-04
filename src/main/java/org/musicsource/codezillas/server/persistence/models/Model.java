@@ -1,4 +1,4 @@
-package org.musicsource.codezillas.server.persistence;
+package org.musicsource.codezillas.server.persistence.models;
 
 public interface Model {
     Integer getId();
