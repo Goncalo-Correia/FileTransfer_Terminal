@@ -23,12 +23,14 @@ public class Server {
     private Map<Integer, ConnectionHandler> connectionHandlerMap;
     private Store store;
     private Integer clientCount;
+    private ServerEngine serverEngine;
 
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
         connectionHandlerMap = Collections.synchronizedMap(new HashMap<Integer, ConnectionHandler>());
         store = new Store();
         clientCount = 0;
+        serverEngine = new ServerEngine();
     }
 
     public void init() {
@@ -47,7 +49,7 @@ public class Server {
 
                 Socket socket = serverSocket.accept();
                 clientCount++;
-                ConnectionHandler clientHandler = new ConnectionHandler(socket, store);
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, store, serverEngine);
 
                 connectionHandlerMap.put(clientCount, clientHandler);
 
@@ -74,10 +76,12 @@ public class Server {
         private ObjectOutputStream outputStream;
         private ServerHandler serverHandler;
         private Store store;
+        private ServerEngine serverEngine;
 
-        public ConnectionHandler(Socket socket, Store store) {
+        public ConnectionHandler(Socket socket, Store store, ServerEngine serverEngine) {
             this.socket = socket;
             this.store = store;
+            this.serverEngine = serverEngine;
             setupStreams();
             serverHandler = new ServerHandler();
         }
@@ -95,32 +99,53 @@ public class Server {
         @Override
         public void run() {
             System.out.println(Messages.CLIENT_CONNECTED);
-            handle();
+            clientCommunication();
         }
 
-        private void handle() {
+        private void clientCommunication() {
             while (serverSocket.isBound()) {
-                try {
-                    Object object = inputStream.readObject();
-                    handleConnection(object);
+                Connection connection = receiveConnection();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                Connection newConnection = handleConnection(connection);
+
+                sendConnection(newConnection);
             }
         }
 
-        private void handleConnection(Object object) {
+        private Connection receiveConnection() {
+            Object object = null;
+            Connection connection = null;
+
+            try {
+                object = inputStream.readObject();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
             if (object instanceof Connection) {
+                connection = (Connection) object;
+            }
+            return connection;
+        }
 
-                Connection connection = (Connection) object;
+        private Connection handleConnection(Connection connection) {
 
-                serverHandler.setConnection(connection);
-                serverHandler.setStore(store);
-                serverHandler.handleConnection();
+            serverHandler.setConnection(connection);
+            serverHandler.setStore(store);
+            serverHandler.setServerEngine(serverEngine);
+
+            return serverHandler.handleConnection();
+        }
+
+        private void sendConnection(Connection connection) {
+
+            try {
+                outputStream.writeObject(connection);
+                outputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

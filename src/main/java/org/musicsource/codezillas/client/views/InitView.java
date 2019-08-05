@@ -1,6 +1,7 @@
 package org.musicsource.codezillas.client.views;
 
-public class UpdateUserView implements View {
+public class InitView implements View {
+
 
     @Override
     public void show() {

@@ -7,6 +7,7 @@ public class ServerHandler {
 
     private Connection connection;
     private Store store;
+    private ServerEngine serverEngine;
 
     public ServerHandler() {
     }
@@ -23,7 +24,12 @@ public class ServerHandler {
         this.store = store;
     }
 
-    public void handleConnection() {
+    public void setServerEngine(ServerEngine serverEngine) {
+        this.serverEngine = serverEngine;
+    }
 
+    public Connection handleConnection() {
+
+        return null;
     }
 }

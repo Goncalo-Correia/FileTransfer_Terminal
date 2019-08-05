@@ -2,6 +2,9 @@ package org.musicsource.codezillas.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
 import org.musicsource.codezillas.connection.Connection;
+import org.musicsource.codezillas.connection.ConnectionType;
+import org.musicsource.codezillas.connection.commands.Command;
+import org.musicsource.codezillas.connection.commands.CommandType;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
 
@@ -46,23 +49,45 @@ public class Client {
 
     private void serverCommunication() {
         System.out.println(Messages.CONNECTED);
+
+        makeConnection(initialConenction());
+        System.out.println(Messages.CONNECTION_COMPLETE);
+
         while (socket.isBound()) {
-            makeConnection();
-            receiveConnection();
+            Connection connection = receiveConnection();
+
+            Connection responseConnection = handleConnection(connection);
+
+            makeConnection(responseConnection);
         }
     }
 
-    private void makeConnection() {
+    private Connection initialConenction() {
+        Connection bootConnection = new Connection();
+        bootConnection.setConnectionType(ConnectionType.BOOT);
+
+        Command command = new Command();
+        command.setCommandType(CommandType.BOOT);
+        command.setMenuOptions(null);
+        command.setMessage(null);
+        bootConnection.setCommand(command);
+
+        bootConnection.setTrack(null);
+
+        System.out.println(Messages.NEW_CONNECTION);
+        return bootConnection;
+    }
+
+    private void makeConnection(Connection connection) {
         try {
-            //outputStream.writeObject(connection);
+            outputStream.writeObject(connection);
             outputStream.flush();
-            System.out.println(Messages.CONNECTION_COMPLETE);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void receiveConnection() {
+    private Connection receiveConnection() {
         Object object = null;
         try {
             object = inputStream.readObject();
@@ -72,12 +97,19 @@ public class Client {
             e.printStackTrace();
         }
 
+        Connection connection = null;
         if (object instanceof Connection) {
-            Connection connection = (Connection) object;
-            clientHandler.setConnection(connection);
-            clientHandler.setPrompt(prompt);
-            clientHandler.handleConnection();
+            connection = (Connection) object;
         }
+        return connection;
+    }
+
+    private Connection handleConnection(Connection connection) {
+
+        clientHandler.setConnection(connection);
+        clientHandler.setPrompt(prompt);
+
+        return clientHandler.handleConnection();
     }
 
     public void shutdown() {

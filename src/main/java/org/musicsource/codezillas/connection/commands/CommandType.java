@@ -10,7 +10,8 @@ public enum CommandType implements Serializable {
     UPDATE,
     UPLOAD,
     DOWNLOAD,
-    QUIT;
+    QUIT,
+    BOOT;
 
     CommandType() {
     }
