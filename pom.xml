@@ -28,10 +28,11 @@
             <groupId>org.academiadecodigo.bootcamp</groupId>
             <artifactId>prompt-view</artifactId>
             <version>0.2.1-SNAPSHOT</version>
-            <scope>system</scope>
+            <!--<scope>system</scope>
             <systemPath>
                 C:/Users/thirt/.m2/repository/org/academiadecodigo/bootcamp/prompt-view/0.2.1-SNAPSHOT/prompt-view-0.2.1-SNAPSHOT.jar
             </systemPath>
+            -->
         </dependency>
 
         <dependency>

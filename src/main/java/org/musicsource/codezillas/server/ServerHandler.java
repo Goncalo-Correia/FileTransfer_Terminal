@@ -5,6 +5,7 @@ import org.musicsource.codezillas.connection.ConnectionType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
 import org.musicsource.codezillas.server.persistence.Store;
+import org.musicsource.codezillas.utils.Messages;
 
 public class ServerHandler {
 
@@ -47,12 +48,12 @@ public class ServerHandler {
 
     private Connection boot() {
         Connection connection = new Connection();
-        connection.setConnectionType(ConnectionType.BOOT);
+        connection.setConnectionType(ConnectionType.COMMAND);
 
         Command command = new Command();
-        command.setCommandType(null);
+        command.setCommandType(CommandType.INIT);
         command.setMessage("Welcome to Music Source");
-        command.setMenuOptions(null);
+        command.setMenuOptions(new String[]{"Login","Register","Quit"});
 
         connection.setCommand(command);
         connection.setTrack(null);

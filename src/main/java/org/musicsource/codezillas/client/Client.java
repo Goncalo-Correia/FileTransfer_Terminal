@@ -4,7 +4,6 @@ import org.academiadecodigo.bootcamp.Prompt;
 import org.musicsource.codezillas.connection.Connection;
 import org.musicsource.codezillas.connection.ConnectionType;
 import org.musicsource.codezillas.connection.commands.Command;
-import org.musicsource.codezillas.connection.commands.CommandType;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
 
@@ -20,10 +19,12 @@ public class Client {
     private ObjectInputStream inputStream;
     private Prompt prompt;
     private ClientHandler clientHandler;
+    private Connection connection;
 
     public Client(Prompt prompt) {
         this.prompt = prompt;
         clientHandler = new ClientHandler();
+        connection = new Connection();
     }
 
     public void init() {
@@ -46,7 +47,8 @@ public class Client {
         makeConnection(initialConenction());
         System.out.println(Messages.CONNECTION_COMPLETE);
 
-        while (socket.isBound()) {
+        //while (socket.isBound()) {
+        while (true) {
             Connection connection = receiveConnection();
 
             Connection responseConnection = handleConnection(connection);
@@ -60,7 +62,7 @@ public class Client {
         bootConnection.setConnectionType(ConnectionType.BOOT);
 
         Command command = new Command();
-        command.setCommandType(CommandType.BOOT);
+        command.setCommandType(null);
         command.setMenuOptions(null);
         command.setMessage(null);
         bootConnection.setCommand(command);
@@ -81,19 +83,14 @@ public class Client {
     }
 
     private Connection receiveConnection() {
-        Object object = null;
         try {
-            object = inputStream.readObject();
+            connection = (Connection) inputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        Connection connection = null;
-        if (object instanceof Connection) {
-            connection = (Connection) object;
-        }
         return connection;
     }
 

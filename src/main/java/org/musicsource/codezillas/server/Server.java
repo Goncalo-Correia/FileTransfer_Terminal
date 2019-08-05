@@ -117,7 +117,9 @@ public class Server {
             Connection connection = null;
 
             try {
-                object = inputStream.readObject();
+                //while (object == null) {
+                    object = inputStream.readObject();
+                //}
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
