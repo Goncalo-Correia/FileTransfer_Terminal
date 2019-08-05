@@ -1,7 +1,9 @@
 package org.musicsource.codezillas.server.persistence.models;
 
+import java.io.Serializable;
+
 //@MappedSuperclass
-public abstract class AbstractModel implements Model {
+public abstract class AbstractModel implements Model, Serializable {
 
     //@Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)

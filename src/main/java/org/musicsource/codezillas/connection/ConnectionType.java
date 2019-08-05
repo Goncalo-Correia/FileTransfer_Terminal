@@ -1,10 +1,11 @@
 package org.musicsource.codezillas.connection;
 
-public enum ConnectionType {
-    SCREEN,
-    RESPONSE,
-    CLIENT_DATA,
-    SERVER_DATA;
+import java.io.Serializable;
+
+public enum ConnectionType implements Serializable {
+    COMMAND,
+    UPLOAD,
+    DOWNLOAD;
 
     ConnectionType() {
     }
