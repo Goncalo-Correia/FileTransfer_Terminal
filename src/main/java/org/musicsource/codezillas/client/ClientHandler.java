@@ -3,6 +3,8 @@ package org.musicsource.codezillas.client;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.musicsource.codezillas.client.views.*;
 import org.musicsource.codezillas.connection.Connection;
+import org.musicsource.codezillas.connection.ConnectionType;
+import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
 
 import java.util.HashMap;
@@ -41,10 +43,14 @@ public class ClientHandler {
     }
 
     public Connection handleConnection() {
-        Connection connection = null;
+        Connection newConnection = null;
         switch (connection.getConnectionType()) {
+            case BOOT:
+                System.out.println(connection.getCommand().getMessage());
+                newConnection = boot();
+                break;
             case COMMAND:
-                connection = command();
+                newConnection = command();
                 break;
             case UPLOAD:
                 upload();
@@ -53,6 +59,20 @@ public class ClientHandler {
                 download();
                 break;
         }
+        return newConnection;
+    }
+
+    private Connection boot() {
+        Connection connection = new Connection();
+        connection.setConnectionType(ConnectionType.COMMAND);
+        connection.setTrack(null);
+
+        Command command = new Command();
+        command.setCommandType(CommandType.BOOT);
+        command.setMessage(null);
+        command.setMenuOptions(null);
+
+        connection.setCommand(command);
         return connection;
     }
 
@@ -94,7 +114,7 @@ public class ClientHandler {
                 view.show();
                 break;
         }
-        return null;
+        return connection;
     }
 
     private void upload() {

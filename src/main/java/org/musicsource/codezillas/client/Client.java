@@ -43,13 +43,6 @@ public class Client {
     }
 
     public void start() {
-        System.out.println(Messages.CONNECTION);
-        serverCommunication();
-    }
-
-    private void serverCommunication() {
-        System.out.println(Messages.CONNECTED);
-
         makeConnection(initialConenction());
         System.out.println(Messages.CONNECTION_COMPLETE);
 

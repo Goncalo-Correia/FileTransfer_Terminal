@@ -14,7 +14,7 @@ public class Messages {
     public static String BOOT_CLIENT = "Booting client...";
     public static String CLIENT_STREAMS = "Preparing streams...";
     public static String CONNECTION = "Establishing connection...";
-    public static String CONNECTED = "Connected";
+    public static String CONNECTING = "Connecting...";
     public static String NEW_CONNECTION = "Creating new connection";
     public static String CONNECTION_COMPLETE = "Connection completed";
 

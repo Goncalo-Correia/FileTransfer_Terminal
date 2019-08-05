@@ -15,10 +15,6 @@ public class ServerHandler {
     public ServerHandler() {
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
@@ -32,7 +28,6 @@ public class ServerHandler {
     }
 
     public Connection handleConnection() {
-        Connection connection = null;
         switch (connection.getConnectionType()) {
             case BOOT:
                 connection = boot();
@@ -52,12 +47,12 @@ public class ServerHandler {
 
     private Connection boot() {
         Connection connection = new Connection();
-        connection.setConnectionType(ConnectionType.COMMAND);
+        connection.setConnectionType(ConnectionType.BOOT);
 
         Command command = new Command();
-        command.setCommandType(CommandType.INIT);
-        command.setMessage("Welcome");
-        command.setMenuOptions(new String[]{"Login","Register","Quit"});
+        command.setCommandType(null);
+        command.setMessage("Welcome to Music Source");
+        command.setMenuOptions(null);
 
         connection.setCommand(command);
         connection.setTrack(null);
@@ -66,7 +61,27 @@ public class ServerHandler {
     }
 
     private Connection command() {
-        return null;
+        CommandType commandType = connection.getCommand().getCommandType();
+        Connection connection = null;
+        switch (commandType) {
+            case INIT:
+                break;
+            case LOGIN:
+                break;
+            case REGISTER:
+                break;
+            case MAIN:
+                break;
+            case UPDATE:
+                break;
+            case UPLOAD:
+                break;
+            case DOWNLOAD:
+                break;
+            case QUIT:
+                break;
+        }
+        return connection;
     }
 
     private Connection upload() {
