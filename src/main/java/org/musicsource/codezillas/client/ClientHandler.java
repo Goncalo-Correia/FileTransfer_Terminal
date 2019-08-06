@@ -1,6 +1,8 @@
 package org.musicsource.codezillas.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
+import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.client.views.*;
 import org.musicsource.codezillas.connection.Connection;
 import org.musicsource.codezillas.connection.commands.CommandType;
@@ -22,7 +24,7 @@ public class ClientHandler {
     }
 
     private void initMap() {
-        viewMap.put(1, new InitView());
+        viewMap.put(1, new InitView(prompt));
         viewMap.put(2, new LoginView());
         viewMap.put(3, new RegisterView());
         viewMap.put(4, new MainMenuView());
@@ -59,15 +61,14 @@ public class ClientHandler {
     private Connection command() {
         CommandType commandType = connection.getCommand().getCommandType();
         View view = null;
-        Connection connection = null;
         switch (commandType) {
             case INIT:
-                view = viewMap.get(1);
-                view.show();
+                Integer initOption = createMenu(connection);
+                connection = clientEngine.initConnection(initOption);
                 break;
             case LOGIN:
-                view = viewMap.get(2);
-                view.show();
+                String[] client = stringMenu(connection);
+                connection = clientEngine.loginConnection(client);
                 break;
             case REGISTER:
                 view = viewMap.get(3);
@@ -103,5 +104,24 @@ public class ClientHandler {
 
     private void download() {
 
+    }
+
+    private Integer createMenu(Connection connection) {
+        MenuInputScanner menuScanner = new MenuInputScanner(connection.getCommand().getMenuOptions());
+        menuScanner.setMessage(connection.getCommand().getMessage());
+        return prompt.getUserInput(menuScanner);
+    }
+
+    private String[] stringMenu(Connection connection) {
+        StringInputScanner stringScanner = new StringInputScanner();
+        String[] answer = new String[2];
+        String[] request = connection.getCommand().getMenuOptions();
+
+        stringScanner.setMessage(request[0]);
+        answer[0] = prompt.getUserInput(stringScanner);
+        stringScanner.setMessage(request[1]);
+        answer[1] = prompt.getUserInput(stringScanner);
+
+        return answer;
     }
 }

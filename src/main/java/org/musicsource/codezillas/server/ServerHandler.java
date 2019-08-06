@@ -63,11 +63,17 @@ public class ServerHandler {
 
     private Connection command() {
         CommandType commandType = connection.getCommand().getCommandType();
-        Connection connection = null;
+        Connection connection = new Connection();
         switch (commandType) {
             case INIT:
                 break;
             case LOGIN:
+                connection.setConnectionType(ConnectionType.COMMAND);
+                Command command = new Command();
+                command.setCommandType(CommandType.LOGIN);
+                String[] client = new String[] {"Insert username: ","nsert password: "};
+                command.setMenuOptions(client);
+                connection.setCommand(command);
                 break;
             case REGISTER:
                 break;
