@@ -21,6 +21,7 @@ public class Server {
     private ServerSocket serverSocket;
     private ExecutorService cachedPool;
     private Map<Integer, ConnectionHandler> connectionHandlerMap;
+    private Map<String, String> usersMap;
     private Store store;
     private Integer clientCount;
     private ServerEngine serverEngine;
@@ -28,6 +29,8 @@ public class Server {
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
         connectionHandlerMap = Collections.synchronizedMap(new HashMap<Integer, ConnectionHandler>());
+        usersMap = Collections.synchronizedMap(new HashMap<String, String>());
+        usersMap.put("goncalo","ginasio1");
         store = new Store();
         clientCount = 0;
         serverEngine = new ServerEngine();
@@ -49,7 +52,7 @@ public class Server {
 
                 Socket socket = serverSocket.accept();
                 clientCount++;
-                ConnectionHandler clientHandler = new ConnectionHandler(socket, store, serverEngine);
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, store, serverEngine, usersMap);
 
                 connectionHandlerMap.put(clientCount, clientHandler);
 
@@ -77,13 +80,15 @@ public class Server {
         private ServerHandler serverHandler;
         private Store store;
         private ServerEngine serverEngine;
+        private Map<String, String> userMap;
 
-        public ConnectionHandler(Socket socket, Store store, ServerEngine serverEngine) {
+        public ConnectionHandler(Socket socket, Store store, ServerEngine serverEngine, Map userMap) {
             this.socket = socket;
             this.store = store;
             this.serverEngine = serverEngine;
             setupStreams();
             serverHandler = new ServerHandler();
+            this.userMap = userMap;
         }
 
         private void setupStreams() {
@@ -117,9 +122,7 @@ public class Server {
             Connection connection = null;
 
             try {
-                //while (object == null) {
-                    object = inputStream.readObject();
-                //}
+                object = inputStream.readObject();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -136,6 +139,7 @@ public class Server {
 
             serverHandler.setConnection(connection);
             serverHandler.setStore(store);
+            serverHandler.setUsersMap(usersMap);
             serverHandler.setServerEngine(serverEngine);
 
             return serverHandler.handleConnection();

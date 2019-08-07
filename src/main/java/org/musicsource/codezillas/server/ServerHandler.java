@@ -5,13 +5,15 @@ import org.musicsource.codezillas.connection.ConnectionType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
 import org.musicsource.codezillas.server.persistence.Store;
-import org.musicsource.codezillas.utils.Messages;
+
+import java.util.Map;
 
 public class ServerHandler {
 
     private Connection connection;
     private Store store;
     private ServerEngine serverEngine;
+    private Map<String, String> usersMap;
 
     public ServerHandler() {
     }
@@ -26,6 +28,11 @@ public class ServerHandler {
 
     public void setServerEngine(ServerEngine serverEngine) {
         this.serverEngine = serverEngine;
+        serverEngine.setUsersMap(usersMap);
+    }
+
+    public void setUsersMap(Map<String, String> usersMap) {
+        this.usersMap = usersMap;
     }
 
     public Connection handleConnection() {
@@ -47,18 +54,7 @@ public class ServerHandler {
     }
 
     private Connection boot() {
-        Connection connection = new Connection();
-        connection.setConnectionType(ConnectionType.COMMAND);
-
-        Command command = new Command();
-        command.setCommandType(CommandType.INIT);
-        command.setMessage("Welcome to Music Source");
-        command.setMenuOptions(new String[]{"Login","Register","Quit"});
-
-        connection.setCommand(command);
-        connection.setTrack(null);
-
-        return connection;
+        return serverEngine.initConnection();
     }
 
     private Connection command() {
@@ -68,14 +64,16 @@ public class ServerHandler {
             case INIT:
                 break;
             case LOGIN:
-                connection.setConnectionType(ConnectionType.COMMAND);
-                Command command = new Command();
-                command.setCommandType(CommandType.LOGIN);
-                String[] client = new String[] {"Insert username: ","nsert password: "};
-                command.setMenuOptions(client);
-                connection.setCommand(command);
+                connection = serverEngine.loginConnection(connection);
+                break;
+            case CREDENTIALS:
+                connection = serverEngine.credentialsConnection(connection);
                 break;
             case REGISTER:
+                connection = serverEngine.registerConnection(connection);
+                break;
+            case ADD_USER:
+                connection = serverEngine.addUserConnection(connection);
                 break;
             case MAIN:
                 break;
@@ -97,5 +95,15 @@ public class ServerHandler {
 
     private Connection download() {
         return null;
+    }
+
+    private boolean validateLogin(Connection connection) {
+        String username = connection.getCommand().getMenuOptions()[0];
+        String password = connection.getCommand().getMenuOptions()[1];
+
+        if (usersMap.containsKey(username) && usersMap.containsValue(password)) {
+            return true;
+        }
+        return false;
     }
 }

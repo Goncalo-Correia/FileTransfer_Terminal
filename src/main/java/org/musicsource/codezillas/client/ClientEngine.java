@@ -26,23 +26,55 @@ public class ClientEngine {
                connection.setCommand(command1);
                break;
            case 3:
-               connection.setConnectionType(ConnectionType.COMMAND);
-               Command command2 = new Command();
-               command2.setCommandType(CommandType.QUIT);
-               connection.setCommand(command2);
+               System.exit(0);
                break;
        }
        return connection;
     }
 
-    public Connection loginConnection(String[] client) {
+    public Connection validateConnection(String[] client) {
         Connection connection = new Connection();
         connection.setConnectionType(ConnectionType.COMMAND);
         Command command = new Command();
-        command.setCommandType(CommandType.MAIN);
+        command.setCommandType(CommandType.CREDENTIALS);
         command.setMenuOptions(client);
         connection.setCommand(command);
         return connection;
+    }
+
+    public Connection mainConnection(Integer mainOption) {
+        Connection connection = null;
+        switch (mainOption) {
+            case 1:
+                connection.setConnectionType(ConnectionType.COMMAND);
+                Command command = new Command();
+                command.setCommandType(CommandType.UPDATE);
+                connection.setCommand(command);
+                break;
+            case 2:
+                connection.setConnectionType(ConnectionType.COMMAND);
+                Command command1 = new Command();
+                command1.setCommandType(CommandType.UPLOAD);
+                connection.setCommand(command1);
+                break;
+            case 3:
+                connection.setConnectionType(ConnectionType.COMMAND);
+                Command command2 = new Command();
+                command2.setCommandType(CommandType.DOWNLOAD);
+                connection.setCommand(command2);
+                break;
+            case 4:
+                connection.setConnectionType(ConnectionType.COMMAND);
+                Command command3 = new Command();
+                command3.setCommandType(CommandType.QUIT);
+                connection.setCommand(command3);
+                break;
+        }
+        return connection;
+    }
+
+    public Connection newUserConnection(String[] registerOptions) {
+        return validateConnection(registerOptions);
     }
 
 }
