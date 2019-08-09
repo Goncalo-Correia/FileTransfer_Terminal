@@ -1,6 +1,6 @@
 package org.musicsource.codezillas.server;
 
-import org.musicsource.codezillas.connection.Connection;
+import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.server.persistence.Store;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
@@ -109,17 +109,17 @@ public class Server {
 
         private void clientCommunication() {
             while (serverSocket.isBound()) {
-                Connection connection = receiveConnection();
+                Request request = receiveConnection();
 
-                Connection newConnection = handleConnection(connection);
+                Request newRequest = handleConnection(request);
 
-                sendConnection(newConnection);
+                sendConnection(newRequest);
             }
         }
 
-        private Connection receiveConnection() {
+        private Request receiveConnection() {
             Object object = null;
-            Connection connection = null;
+            Request request = null;
 
             try {
                 object = inputStream.readObject();
@@ -129,15 +129,15 @@ public class Server {
                 e.printStackTrace();
             }
 
-            if (object instanceof Connection) {
-                connection = (Connection) object;
+            if (object instanceof Request) {
+                request = (Request) object;
             }
-            return connection;
+            return request;
         }
 
-        private Connection handleConnection(Connection connection) {
+        private Request handleConnection(Request request) {
 
-            serverHandler.setConnection(connection);
+            serverHandler.setRequest(request);
             serverHandler.setStore(store);
             serverHandler.setUsersMap(usersMap);
             serverHandler.setServerEngine(serverEngine);
@@ -145,10 +145,10 @@ public class Server {
             return serverHandler.handleConnection();
         }
 
-        private void sendConnection(Connection connection) {
+        private void sendConnection(Request request) {
 
             try {
-                outputStream.writeObject(connection);
+                outputStream.writeObject(request);
                 outputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,20 +1,22 @@
 package org.musicsource.codezillas.server.persistence.models;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
-//@Table(name = "user")
+@Entity
+@Table(name = "user")
 public class User extends AbstractModel {
 
     private String username;
+    private String password;
 
-    //@OneToMany(
-    //        cascade = {CascadeType.ALL},
-    //        orphanRemoval = true,
-    //        mappedBy = "user",
-    //        fetch = FetchType.EAGER
-    //)
+    @OneToMany(
+            cascade = {CascadeType.ALL},
+            orphanRemoval = true,
+            mappedBy = "user",
+            fetch = FetchType.EAGER
+    )
     private List<Track> trackList = new ArrayList<>();
 
     public User() {
@@ -26,6 +28,14 @@ public class User extends AbstractModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Track> getTrackList() {

@@ -2,24 +2,25 @@ package org.musicsource.codezillas.connection;
 
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.server.persistence.models.Track;
+import org.musicsource.codezillas.server.persistence.models.User;
 
 import java.io.Serializable;
 
-public class Connection implements Serializable {
+public class Request implements Serializable {
 
-    private ConnectionType connectionType;
+    private RequestType requestType;
     private Track track;
     private Command command;
 
-    public Connection() {
+    public Request() {
     }
 
-    public ConnectionType getConnectionType() {
-        return connectionType;
+    public RequestType getRequestType() {
+        return requestType;
     }
 
-    public void setConnectionType(ConnectionType connectionType) {
-        this.connectionType = connectionType;
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
     }
 
     public Track getTrack() {

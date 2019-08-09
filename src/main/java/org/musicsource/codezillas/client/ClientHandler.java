@@ -3,11 +3,11 @@ package org.musicsource.codezillas.client;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
-import org.musicsource.codezillas.connection.Connection;
+import org.musicsource.codezillas.connection.Request;
 
 public class ClientHandler {
 
-    private Connection connection;
+    private Request request;
     private Prompt prompt;
     private ClientEngine clientEngine;
 
@@ -15,18 +15,19 @@ public class ClientHandler {
         clientEngine = new ClientEngine();
     }
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public void setRequest(Request request) {
+        this.request = request;
     }
 
     public void setPrompt(Prompt prompt) {
         this.prompt = prompt;
+        clientEngine.setPrompt(prompt);
     }
 
-    public Connection handleConnection() {
-        switch (connection.getConnectionType()) {
+    public Request handleConnection() {
+        switch (request.getRequestType()) {
             case COMMAND:
-                connection = command();
+                request = command();
                 break;
             case UPLOAD:
                 upload();
@@ -35,27 +36,27 @@ public class ClientHandler {
                 download();
                 break;
         }
-        return connection;
+        return request;
     }
 
-    private Connection command() {
-        Connection newConnection = null;
-        switch (connection.getCommand().getCommandType()) {
+    private Request command() {
+        Request newRequest = null;
+        switch (request.getCommand().getCommandType()) {
             case INIT:
-                Integer initOption = createMenu(connection);
-                newConnection = clientEngine.initConnection(initOption);
+                Integer initOption = createMenu(request);
+                newRequest = clientEngine.initConnection(initOption);
                 break;
             case VALIDATE:
-                String[] client = stringMenu(connection);
-                newConnection = clientEngine.validateConnection(client);
+                String[] client = stringMenu(request);
+                newRequest = clientEngine.validateConnection(client);
                 break;
             case MAIN:
-                Integer mainOption = createMenu(connection);
-                newConnection = clientEngine.mainConnection(mainOption);
+                Integer mainOption = createMenu(request);
+                newRequest = clientEngine.mainConnection(mainOption);
                 break;
             case NEW_USER:
-                String[] register = stringMenu(connection);
-                newConnection = clientEngine.newUserConnection(register);
+                String[] register = stringMenu(request);
+                newRequest = clientEngine.newUserConnection(register);
                 break;
             case UPDATE:
                 break;
@@ -66,7 +67,7 @@ public class ClientHandler {
             case QUIT:
                 break;
         }
-        return newConnection;
+        return newRequest;
     }
 
     private void upload() {
@@ -77,17 +78,17 @@ public class ClientHandler {
 
     }
 
-    private Integer createMenu(Connection connection) {
-        MenuInputScanner menuScanner = new MenuInputScanner(connection.getCommand().getMenuOptions());
-        menuScanner.setMessage(connection.getCommand().getMessage());
+    private Integer createMenu(Request request) {
+        MenuInputScanner menuScanner = new MenuInputScanner(request.getCommand().getMenuOptions());
+        menuScanner.setMessage(request.getCommand().getMessage());
         return prompt.getUserInput(menuScanner);
     }
 
-    private String[] stringMenu(Connection connection) {
+    private String[] stringMenu(Request request) {
         StringInputScanner stringScanner = new StringInputScanner();
-        String[] answers = new String[connection.getCommand().getMenuOptions().length];
+        String[] answers = new String[request.getCommand().getMenuOptions().length];
         for (int i = 0; i < answers.length; i++) {
-            stringScanner.setMessage(connection.getCommand().getMenuOptions()[i]);
+            stringScanner.setMessage(request.getCommand().getMenuOptions()[i]);
             answers[i] = prompt.getUserInput(stringScanner);
         }
         return answers;

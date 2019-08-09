@@ -1,62 +1,51 @@
 package org.musicsource.codezillas.server;
 
-import org.musicsource.codezillas.connection.Connection;
-import org.musicsource.codezillas.connection.ConnectionType;
+import org.musicsource.codezillas.connection.Request;
+import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
 public class ServerEngine {
 
     private Map<String,String> usersMap;
+    private ServerServices serverServices;
+    private ServerRequests serverRequests;
 
-    public Connection initConnection() {
-        Connection connection = new Connection();
-        connection.setConnectionType(ConnectionType.COMMAND);
-
-        Command command = new Command();
-        command.setCommandType(CommandType.INIT);
-        command.setMessage("Welcome to Music Source");
-        command.setMenuOptions(new String[]{"Login","Register","Quit"});
-
-        connection.setCommand(command);
-        connection.setTrack(null);
-        return connection;
+    @Autowired
+    public void setServerServices(ServerServices serverServices) {
+        this.serverServices = serverServices;
     }
 
-    public Connection loginConnection(Connection connection) {
-        connection.setConnectionType(ConnectionType.COMMAND);
-        Command command = new Command();
-        command.setCommandType(CommandType.VALIDATE);
-        command.setMenuOptions(new String[]{"Insert username: ","Insert password: "});
-        connection.setCommand(command);
-        return connection;
+    @Autowired
+    public void setServerRequests(ServerRequests serverRequests) {
+        this.serverRequests = serverRequests;
     }
 
-    public Connection mainConnection(Connection connection) {
-        connection.setConnectionType(ConnectionType.COMMAND);
-        Command command = new Command();
-        command.setCommandType(CommandType.MAIN);
-        command.setMessage("Client Profile: ");
-        String[] client = new String[] {"Client Info","Upload","Download","Quit"};
-        command.setMenuOptions(client);
-        connection.setCommand(command);
-        return connection;
+    public Request initRequest() {
+        return serverRequests.initRequest();
     }
 
-    public Connection credentialsConnection(Connection connection) {
-        /*
-        if (authenticate(connection.getCommand().getMenuOptions()[0], connection.getCommand().getMenuOptions()[1])) {
-            return mainConnection(connection);
+    public Request loginConnection(Request request) {
+        return serverRequests.loginRequest(request);
+    }
+
+    public Request mainConnection(Request request) {
+        return serverRequests.mainRequest(request);
+    }
+
+    public Request credentialsConnection(Request request) {
+
+        if (authenticate(request.getCommand().getMenuOptions()[0], request.getCommand().getMenuOptions()[1])) {
+            return mainConnection(request);
         }
-        return initConnection();
-        */
-        return mainConnection(connection);
+        return initRequest();
     }
 
     private boolean authenticate(String username, String password) {
-        if (usersMap.get(username) != null && usersMap.get(username).equals(password)) {
+        if (usersMap.get(username).equals(password)) {
             return true;
         }
         return false;
@@ -66,22 +55,22 @@ public class ServerEngine {
         this.usersMap = usersMap;
     }
 
-    public Connection registerConnection(Connection connection) {
-        connection.setConnectionType(ConnectionType.COMMAND);
-        Command command = new Command();
-        command.setCommandType(CommandType.NEW_USER);
-        command.setMenuOptions(new String[]{"Register username: ","Register password: "});
-        connection.setCommand(command);
-        return connection;
+    public Request registerConnection(Request request) {
+        return serverRequests.registerRequest(request);
     }
 
-    public Connection addUserConnection(Connection connection) {
-        usersMap.put(connection.getCommand().getMenuOptions()[0],connection.getCommand().getMenuOptions()[1]);
-        Connection connection1 = new Connection();
-        connection1.setConnectionType(ConnectionType.COMMAND);
+    public Request addUserConnection(Request request) {
+        String username = request.getCommand().getMenuOptions()[0];
+        String password = request.getCommand().getMenuOptions()[1];
+        if (usersMap.get(username) != null) {
+
+        }
+        usersMap.put(username, password);
+        Request request1 = new Request();
+        request1.setRequestType(RequestType.COMMAND);
         Command command = new Command();
         command.setCommandType(CommandType.VALIDATE);
-        connection1.setCommand(command);
-        return connection1;
+        request1.setCommand(command);
+        return request1;
     }
 }

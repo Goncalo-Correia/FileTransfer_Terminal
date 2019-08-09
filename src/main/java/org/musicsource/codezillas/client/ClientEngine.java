@@ -1,79 +1,87 @@
 package org.musicsource.codezillas.client;
 
-import org.musicsource.codezillas.connection.Connection;
-import org.musicsource.codezillas.connection.ConnectionType;
+import org.academiadecodigo.bootcamp.Prompt;
+import org.musicsource.codezillas.connection.Request;
+import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
 
 public class ClientEngine {
 
+    private Prompt prompt;
+
     public ClientEngine() {
     }
 
-    public Connection initConnection(Integer option){
-        Connection connection = new Connection();
+    public void setPrompt(Prompt prompt) {
+        this.prompt = prompt;
+    }
+
+    public Request initConnection(Integer option){
+        Request request = new Request();
        switch (option) {
            case 1:
-               connection.setConnectionType(ConnectionType.COMMAND);
+               request.setRequestType(RequestType.COMMAND);
                Command command = new Command();
                command.setCommandType(CommandType.LOGIN);
-               connection.setCommand(command);
+               request.setCommand(command);
                break;
            case 2:
-               connection.setConnectionType(ConnectionType.COMMAND);
+               request.setRequestType(RequestType.COMMAND);
                Command command1 = new Command();
                command1.setCommandType(CommandType.REGISTER);
-               connection.setCommand(command1);
+               request.setCommand(command1);
                break;
            case 3:
                System.exit(0);
                break;
        }
-       return connection;
+       return request;
     }
 
-    public Connection validateConnection(String[] client) {
-        Connection connection = new Connection();
-        connection.setConnectionType(ConnectionType.COMMAND);
+    public Request validateConnection(String[] client) {
+        Request request = new Request();
+        request.setRequestType(RequestType.COMMAND);
         Command command = new Command();
         command.setCommandType(CommandType.CREDENTIALS);
         command.setMenuOptions(client);
-        connection.setCommand(command);
-        return connection;
+        request.setCommand(command);
+        return request;
     }
 
-    public Connection mainConnection(Integer mainOption) {
-        Connection connection = null;
+    public Request mainConnection(Integer mainOption) {
+        Request request = null;
         switch (mainOption) {
             case 1:
-                connection.setConnectionType(ConnectionType.COMMAND);
+                request.setRequestType(RequestType.COMMAND);
                 Command command = new Command();
                 command.setCommandType(CommandType.UPDATE);
-                connection.setCommand(command);
+                request.setCommand(command);
                 break;
             case 2:
-                connection.setConnectionType(ConnectionType.COMMAND);
+                request.setRequestType(RequestType.COMMAND);
+
                 Command command1 = new Command();
                 command1.setCommandType(CommandType.UPLOAD);
-                connection.setCommand(command1);
+                request.setCommand(command1);
                 break;
             case 3:
-                connection.setConnectionType(ConnectionType.COMMAND);
+                request.setRequestType(RequestType.COMMAND);
                 Command command2 = new Command();
                 command2.setCommandType(CommandType.DOWNLOAD);
-                connection.setCommand(command2);
+                request.setCommand(command2);
                 break;
             case 4:
-                connection.setConnectionType(ConnectionType.COMMAND);
+                request.setRequestType(RequestType.COMMAND);
                 Command command3 = new Command();
                 command3.setCommandType(CommandType.QUIT);
-                connection.setCommand(command3);
+                request.setCommand(command3);
                 break;
         }
-        return connection;
+        return request;
     }
 
-    public Connection newUserConnection(String[] registerOptions) {
+    public Request newUserConnection(String[] registerOptions) {
         return validateConnection(registerOptions);
     }
 

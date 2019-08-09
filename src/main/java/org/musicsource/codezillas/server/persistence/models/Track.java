@@ -1,13 +1,15 @@
 package org.musicsource.codezillas.server.persistence.models;
 
-//@Entity
-//@Table(name = "track")
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+import javax.persistence.*;
+
+@Entity
+@Table(name = "track")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Track extends AbstractModel {
 
     private String trackName;
 
-    //@ManyToOne
+    @ManyToOne
     private User user;
 
     public Track() {

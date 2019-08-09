@@ -1,8 +1,6 @@
 package org.musicsource.codezillas.server;
 
-import org.musicsource.codezillas.connection.Connection;
-import org.musicsource.codezillas.connection.ConnectionType;
-import org.musicsource.codezillas.connection.commands.Command;
+import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.connection.commands.CommandType;
 import org.musicsource.codezillas.server.persistence.Store;
 
@@ -10,7 +8,7 @@ import java.util.Map;
 
 public class ServerHandler {
 
-    private Connection connection;
+    private Request request;
     private Store store;
     private ServerEngine serverEngine;
     private Map<String, String> usersMap;
@@ -18,8 +16,8 @@ public class ServerHandler {
     public ServerHandler() {
     }
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public void setRequest(Request request) {
+        this.request = request;
     }
 
     public void setStore(Store store) {
@@ -35,45 +33,45 @@ public class ServerHandler {
         this.usersMap = usersMap;
     }
 
-    public Connection handleConnection() {
-        switch (connection.getConnectionType()) {
+    public Request handleConnection() {
+        switch (request.getRequestType()) {
             case BOOT:
-                connection = boot();
+                request = boot();
                 break;
             case COMMAND:
-                connection = command();
+                request = command();
                 break;
             case UPLOAD:
-                connection = upload();
+                request = upload();
                 break;
             case DOWNLOAD:
-                connection = download();
+                request = download();
                 break;
         }
-        return connection;
+        return request;
     }
 
-    private Connection boot() {
-        return serverEngine.initConnection();
+    private Request boot() {
+        return serverEngine.initRequest();
     }
 
-    private Connection command() {
-        CommandType commandType = connection.getCommand().getCommandType();
-        Connection connection = new Connection();
+    private Request command() {
+        CommandType commandType = this.request.getCommand().getCommandType();
+        Request newRequest = new Request();
         switch (commandType) {
             case INIT:
                 break;
             case LOGIN:
-                connection = serverEngine.loginConnection(connection);
+                newRequest = serverEngine.loginConnection(request);
                 break;
             case CREDENTIALS:
-                connection = serverEngine.credentialsConnection(connection);
+                newRequest = serverEngine.credentialsConnection(request);
                 break;
             case REGISTER:
-                connection = serverEngine.registerConnection(connection);
+                newRequest = serverEngine.registerConnection(request);
                 break;
             case ADD_USER:
-                connection = serverEngine.addUserConnection(connection);
+                newRequest = serverEngine.addUserConnection(request);
                 break;
             case MAIN:
                 break;
@@ -86,24 +84,15 @@ public class ServerHandler {
             case QUIT:
                 break;
         }
-        return connection;
+        return newRequest;
     }
 
-    private Connection upload() {
+    private Request upload() {
         return null;
     }
 
-    private Connection download() {
+    private Request download() {
         return null;
     }
 
-    private boolean validateLogin(Connection connection) {
-        String username = connection.getCommand().getMenuOptions()[0];
-        String password = connection.getCommand().getMenuOptions()[1];
-
-        if (usersMap.containsKey(username) && usersMap.containsValue(password)) {
-            return true;
-        }
-        return false;
-    }
 }

@@ -16,6 +16,6 @@ public class Messages {
     public static String CONNECTION = "Establishing connection...";
     public static String CONNECTING = "Connecting...";
     public static String NEW_CONNECTION = "Creating new connection";
-    public static String CONNECTION_COMPLETE = "Connection completed";
+    public static String CONNECTION_COMPLETE = "Request completed";
 
 }

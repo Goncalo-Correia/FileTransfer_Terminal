@@ -1,8 +1,8 @@
 package org.musicsource.codezillas.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
-import org.musicsource.codezillas.connection.Connection;
-import org.musicsource.codezillas.connection.ConnectionType;
+import org.musicsource.codezillas.connection.Request;
+import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
@@ -19,12 +19,12 @@ public class Client {
     private ObjectInputStream inputStream;
     private Prompt prompt;
     private ClientHandler clientHandler;
-    private Connection connection;
+    private Request request;
 
     public Client(Prompt prompt) {
         this.prompt = prompt;
         clientHandler = new ClientHandler();
-        connection = new Connection();
+        request = new Request();
     }
 
     public void init() {
@@ -44,59 +44,59 @@ public class Client {
     }
 
     public void start() {
-        makeConnection(initialConenction());
+        makeConnection(initialConnection());
         System.out.println(Messages.CONNECTION_COMPLETE);
 
         //while (socket.isBound()) {
         while (true) {
-            Connection connection = receiveConnection();
+            Request request = receiveConnection();
 
-            Connection responseConnection = handleConnection(connection);
+            Request responseRequest = handleConnection(request);
 
-            makeConnection(responseConnection);
+            makeConnection(responseRequest);
         }
     }
 
-    private Connection initialConenction() {
-        Connection bootConnection = new Connection();
-        bootConnection.setConnectionType(ConnectionType.BOOT);
+    private Request initialConnection() {
+        Request bootRequest = new Request();
+        bootRequest.setRequestType(RequestType.BOOT);
 
         Command command = new Command();
         command.setCommandType(null);
         command.setMenuOptions(null);
         command.setMessage(null);
-        bootConnection.setCommand(command);
+        bootRequest.setCommand(command);
 
-        bootConnection.setTrack(null);
+        bootRequest.setTrack(null);
 
         System.out.println(Messages.NEW_CONNECTION);
-        return bootConnection;
+        return bootRequest;
     }
 
-    private void makeConnection(Connection connection) {
+    private void makeConnection(Request request) {
         try {
-            outputStream.writeObject(connection);
+            outputStream.writeObject(request);
             outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Connection receiveConnection() {
+    private Request receiveConnection() {
         try {
-            connection = (Connection) inputStream.readObject();
+            request = (Request) inputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return connection;
+        return request;
     }
 
-    private Connection handleConnection(Connection connection) {
+    private Request handleConnection(Request request) {
 
-        clientHandler.setConnection(connection);
+        clientHandler.setRequest(request);
         clientHandler.setPrompt(prompt);
 
         return clientHandler.handleConnection();
