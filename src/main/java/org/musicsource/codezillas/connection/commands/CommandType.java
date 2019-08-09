@@ -16,7 +16,7 @@ public enum CommandType implements Serializable {
     UPLOAD,
     DOWNLOAD,
     QUIT,
-    BOOT;
+    REBOOT;
 
     CommandType() {
     }

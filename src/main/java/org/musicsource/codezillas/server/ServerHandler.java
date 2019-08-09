@@ -60,6 +60,7 @@ public class ServerHandler {
         Request newRequest = new Request();
         switch (commandType) {
             case INIT:
+                newRequest = serverEngine.initRequest();
                 break;
             case LOGIN:
                 newRequest = serverEngine.loginConnection(request);

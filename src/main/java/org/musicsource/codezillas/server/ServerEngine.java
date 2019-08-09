@@ -14,14 +14,9 @@ public class ServerEngine {
     private ServerServices serverServices;
     private ServerRequests serverRequests;
 
-    @Autowired
-    public void setServerServices(ServerServices serverServices) {
-        this.serverServices = serverServices;
-    }
-
-    @Autowired
-    public void setServerRequests(ServerRequests serverRequests) {
-        this.serverRequests = serverRequests;
+    public ServerEngine() {
+        serverServices = new ServerServices();
+        serverRequests = new ServerRequests();
     }
 
     public Request initRequest() {
@@ -39,9 +34,9 @@ public class ServerEngine {
     public Request credentialsConnection(Request request) {
 
         if (authenticate(request.getCommand().getMenuOptions()[0], request.getCommand().getMenuOptions()[1])) {
-            return mainConnection(request);
+            return serverRequests.mainRequest(request);
         }
-        return initRequest();
+        return serverRequests.rebootRequest(request);
     }
 
     private boolean authenticate(String username, String password) {

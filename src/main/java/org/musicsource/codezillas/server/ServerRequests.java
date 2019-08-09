@@ -50,4 +50,14 @@ public class ServerRequests {
         return request;
     }
 
+    public Request rebootRequest(Request request) {
+        request.setRequestType(RequestType.COMMAND);
+        Command command = new Command();
+        command.setCommandType(CommandType.REBOOT);
+        command.setMessage("Welcome to Music Source");
+        command.setMenuOptions(new String[]{"Login","Register","Quit"});
+        request.setCommand(command);
+        return request;
+    }
+
 }

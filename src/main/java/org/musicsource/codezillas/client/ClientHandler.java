@@ -43,6 +43,7 @@ public class ClientHandler {
         Request newRequest = null;
         switch (request.getCommand().getCommandType()) {
             case INIT:
+            case REBOOT:
                 Integer initOption = createMenu(request);
                 newRequest = clientEngine.initConnection(initOption);
                 break;
