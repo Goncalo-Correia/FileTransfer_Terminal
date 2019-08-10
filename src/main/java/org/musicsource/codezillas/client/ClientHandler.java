@@ -33,7 +33,7 @@ public class ClientHandler {
                 upload();
                 break;
             case DOWNLOAD:
-                download();
+                request = download();
                 break;
         }
         return request;
@@ -75,8 +75,16 @@ public class ClientHandler {
 
     }
 
-    private void download() {
-
+    private Request download() {
+        Request newRequest = new Request();
+        switch (request.getCommand().getCommandType()) {
+            case SERVER_FILES:
+                Integer selectedFile = createMenu(request);
+                break;
+            case DOWNLOAD:
+                break;
+        }
+        return newRequest;
     }
 
     private Integer createMenu(Request request) {

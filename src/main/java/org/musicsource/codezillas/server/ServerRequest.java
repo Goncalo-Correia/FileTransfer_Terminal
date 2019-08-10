@@ -5,11 +5,11 @@ import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
 
-public class ServerRequests {
+public class ServerRequest {
 
     private ServerFileManager serverFileManager;
 
-    public ServerRequests() {
+    public ServerRequest() {
         serverFileManager = new ServerFileManager();
     }
 
@@ -64,6 +64,20 @@ public class ServerRequests {
         command.setMenuOptions(new String[]{"Login","Register","Quit"});
         request.setCommand(command);
         return request;
+    }
+
+    public Request serverFileRequest(Request request) {
+        request.setRequestType(RequestType.DOWNLOAD);
+        Command command = new Command();
+        command.setCommandType(CommandType.SERVER_FILES);
+        command.setMessage("Select file to download: ");
+        command.setMenuOptions(serverFileManager.listServerFilesForFolder());
+        request.setCommand(command);
+        return request;
+    }
+
+    public Request downloadFileRequest(Request request) {
+        return null;
     }
 
 }

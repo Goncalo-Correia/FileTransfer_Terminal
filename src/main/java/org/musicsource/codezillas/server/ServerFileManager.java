@@ -9,10 +9,13 @@ public class ServerFileManager {
     public ServerFileManager() {
     }
 
-    public void listFilesForFolder() {
+    public String[] listServerFilesForFolder() {
+        String[] fileNames = new String[folder.listFiles().length];
+        int index = 0;
         for (File fileEntry : folder.listFiles()) {
-            System.out.println(fileEntry.getName());
-            System.out.println(fileEntry.getPath());
+            fileNames[index] = fileEntry.getName();
+            index++;
         }
+        return fileNames;
     }
 }

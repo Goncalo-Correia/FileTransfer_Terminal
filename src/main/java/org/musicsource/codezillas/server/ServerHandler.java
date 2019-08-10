@@ -83,11 +83,20 @@ public class ServerHandler {
     }
 
     private Request upload() {
-        return null;
+        return serverEngine.uploadFileConnection(request);
     }
 
     private Request download() {
-        return null;
+        Request downloadRequest = new Request();
+        switch (request.getCommand().getCommandType()) {
+            case SERVER_FILES:
+                downloadRequest = serverEngine.serverFileConnection(request);
+                break;
+            case DOWNLOAD:
+                downloadRequest = serverEngine.downloadConnection(request);
+                break;
+        }
+        return downloadRequest;
     }
 
 }

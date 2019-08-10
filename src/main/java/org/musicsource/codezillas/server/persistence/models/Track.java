@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Track extends AbstractModel {
 
-    private String trackName;
+    private String[] trackData;
 
     @ManyToOne
     private User user;
@@ -15,12 +15,12 @@ public class Track extends AbstractModel {
     public Track() {
     }
 
-    public String getTrackName() {
-        return trackName;
+    public String[] getTrackData() {
+        return trackData;
     }
 
-    public void setTrackName(String trackName) {
-        this.trackName = trackName;
+    public void setTrackData(String[] trackData) {
+        this.trackData = trackData;
     }
 
     public User getUser() {
