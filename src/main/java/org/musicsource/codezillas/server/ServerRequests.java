@@ -7,6 +7,12 @@ import org.musicsource.codezillas.connection.commands.CommandType;
 
 public class ServerRequests {
 
+    private ServerFileManager serverFileManager;
+
+    public ServerRequests() {
+        serverFileManager = new ServerFileManager();
+    }
+
     public Request initRequest() {
         Request request = new Request();
         request.setRequestType(RequestType.COMMAND);

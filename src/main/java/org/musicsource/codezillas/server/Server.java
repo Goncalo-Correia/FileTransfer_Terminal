@@ -1,7 +1,6 @@
 package org.musicsource.codezillas.server;
 
 import org.musicsource.codezillas.connection.Request;
-import org.musicsource.codezillas.server.persistence.Store;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
 
@@ -22,7 +21,6 @@ public class Server {
     private ExecutorService cachedPool;
     private Map<Integer, ConnectionHandler> connectionHandlerMap;
     private Map<String, String> usersMap;
-    private Store store;
     private Integer clientCount;
     private ServerEngine serverEngine;
 
@@ -31,7 +29,6 @@ public class Server {
         connectionHandlerMap = Collections.synchronizedMap(new HashMap<Integer, ConnectionHandler>());
         usersMap = Collections.synchronizedMap(new HashMap<String, String>());
         usersMap.put("goncalo","ginasio1");
-        store = new Store();
         clientCount = 0;
         serverEngine = new ServerEngine();
     }
@@ -52,7 +49,7 @@ public class Server {
 
                 Socket socket = serverSocket.accept();
                 clientCount++;
-                ConnectionHandler clientHandler = new ConnectionHandler(socket, store, serverEngine, usersMap);
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, serverEngine, usersMap);
 
                 connectionHandlerMap.put(clientCount, clientHandler);
 
@@ -78,13 +75,11 @@ public class Server {
         private ObjectInputStream inputStream;
         private ObjectOutputStream outputStream;
         private ServerHandler serverHandler;
-        private Store store;
         private ServerEngine serverEngine;
         private Map<String, String> userMap;
 
-        public ConnectionHandler(Socket socket, Store store, ServerEngine serverEngine, Map userMap) {
+        public ConnectionHandler(Socket socket, ServerEngine serverEngine, Map userMap) {
             this.socket = socket;
-            this.store = store;
             this.serverEngine = serverEngine;
             setupStreams();
             serverHandler = new ServerHandler();
@@ -138,7 +133,6 @@ public class Server {
         private Request handleConnection(Request request) {
 
             serverHandler.setRequest(request);
-            serverHandler.setStore(store);
             serverHandler.setUsersMap(usersMap);
             serverHandler.setServerEngine(serverEngine);
 

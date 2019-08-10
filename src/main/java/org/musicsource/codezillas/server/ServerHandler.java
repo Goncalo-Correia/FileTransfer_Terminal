@@ -2,14 +2,12 @@ package org.musicsource.codezillas.server;
 
 import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.connection.commands.CommandType;
-import org.musicsource.codezillas.server.persistence.Store;
 
 import java.util.Map;
 
 public class ServerHandler {
 
     private Request request;
-    private Store store;
     private ServerEngine serverEngine;
     private Map<String, String> usersMap;
 
@@ -18,10 +16,6 @@ public class ServerHandler {
 
     public void setRequest(Request request) {
         this.request = request;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
     }
 
     public void setServerEngine(ServerEngine serverEngine) {

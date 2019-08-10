@@ -3,8 +3,9 @@ package org.musicsource.codezillas.server;
 import org.musicsource.codezillas.server.persistence.models.Track;
 import org.musicsource.codezillas.server.persistence.models.User;
 import org.musicsource.codezillas.server.services.TrackService;
+import org.musicsource.codezillas.server.services.TrackServiceImpl;
 import org.musicsource.codezillas.server.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.musicsource.codezillas.server.services.UserServiceImpl;
 
 import java.util.List;
 
@@ -13,14 +14,9 @@ public class ServerServices {
     private UserService userService;
     private TrackService trackService;
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setTrackService(TrackService trackService) {
-        this.trackService = trackService;
+    public ServerServices() {
+        userService = new UserServiceImpl();
+        trackService = new TrackServiceImpl();
     }
 
     public User getUserById(Integer id) {

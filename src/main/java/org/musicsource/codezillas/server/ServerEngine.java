@@ -4,7 +4,6 @@ import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -32,18 +31,12 @@ public class ServerEngine {
     }
 
     public Request credentialsConnection(Request request) {
-
-        if (authenticate(request.getCommand().getMenuOptions()[0], request.getCommand().getMenuOptions()[1])) {
+        String username = request.getCommand().getMenuOptions()[0];
+        String password = request.getCommand().getMenuOptions()[1];
+        if (usersMap.get(username) != null && usersMap.get(username).equals(password)) {
             return serverRequests.mainRequest(request);
         }
         return serverRequests.rebootRequest(request);
-    }
-
-    private boolean authenticate(String username, String password) {
-        if (usersMap.get(username).equals(password)) {
-            return true;
-        }
-        return false;
     }
 
     public void setUsersMap(Map<String, String> usersMap) {
@@ -57,15 +50,10 @@ public class ServerEngine {
     public Request addUserConnection(Request request) {
         String username = request.getCommand().getMenuOptions()[0];
         String password = request.getCommand().getMenuOptions()[1];
-        if (usersMap.get(username) != null) {
-
+        if (usersMap.get(username) == null) {
+            usersMap.put(username, password);
+            return serverRequests.mainRequest(request);
         }
-        usersMap.put(username, password);
-        Request request1 = new Request();
-        request1.setRequestType(RequestType.COMMAND);
-        Command command = new Command();
-        command.setCommandType(CommandType.VALIDATE);
-        request1.setCommand(command);
-        return request1;
+        return serverRequests.registerRequest(request);
     }
 }

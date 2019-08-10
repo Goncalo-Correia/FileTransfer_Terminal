@@ -82,7 +82,13 @@ public class ClientEngine {
     }
 
     public Request newUserConnection(String[] registerOptions) {
-        return validateConnection(registerOptions);
+        Request request = new Request();
+        request.setRequestType(RequestType.COMMAND);
+        Command command = new Command();
+        command.setCommandType(CommandType.ADD_USER);
+        command.setMenuOptions(registerOptions);
+        request.setCommand(command);
+        return request;
     }
 
 }

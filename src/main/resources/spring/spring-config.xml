@@ -15,6 +15,5 @@
     </bean>
 
     <import resource="persistence.xml"/>
-    <import resource="services.xml"/>
 
 </beans>
