@@ -9,12 +9,12 @@ import org.musicsource.codezillas.server.services.UserServiceImpl;
 
 import java.util.List;
 
-public class ServerServices {
+public class ServerService {
 
     private UserService userService;
     private TrackService trackService;
 
-    public ServerServices() {
+    public ServerService() {
         userService = new UserServiceImpl();
         trackService = new TrackServiceImpl();
     }

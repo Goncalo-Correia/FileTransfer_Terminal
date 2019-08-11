@@ -10,7 +10,7 @@ public enum CommandType implements Serializable {
     REGISTER,
     NEW_USER,
     ADD_USER,
-    CONFIRM,
+    SERVER_FILES,
     MAIN,
     UPDATE,
     UPLOAD,

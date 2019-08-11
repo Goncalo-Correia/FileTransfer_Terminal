@@ -1,42 +1,39 @@
 package org.musicsource.codezillas.server;
 
 import org.musicsource.codezillas.connection.Request;
-import org.musicsource.codezillas.connection.RequestType;
-import org.musicsource.codezillas.connection.commands.Command;
-import org.musicsource.codezillas.connection.commands.CommandType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ServerEngine {
 
     private Map<String,String> usersMap;
-    private ServerServices serverServices;
-    private ServerRequests serverRequests;
+    private ServerService serverService;
+    private ServerRequest serverRequest;
+    private ServerFileManager serverFileManager;
 
     public ServerEngine() {
-        serverServices = new ServerServices();
-        serverRequests = new ServerRequests();
+        usersMap = new HashMap<>();
+        serverService = new ServerService();
+        serverRequest = new ServerRequest();
+        serverFileManager = new ServerFileManager();
     }
 
     public Request initRequest() {
-        return serverRequests.initRequest();
+        return serverRequest.initRequest();
     }
 
     public Request loginConnection(Request request) {
-        return serverRequests.loginRequest(request);
-    }
-
-    public Request mainConnection(Request request) {
-        return serverRequests.mainRequest(request);
+        return serverRequest.loginRequest(request);
     }
 
     public Request credentialsConnection(Request request) {
         String username = request.getCommand().getMenuOptions()[0];
         String password = request.getCommand().getMenuOptions()[1];
         if (usersMap.get(username) != null && usersMap.get(username).equals(password)) {
-            return serverRequests.mainRequest(request);
+            return serverRequest.mainRequest(request);
         }
-        return serverRequests.rebootRequest(request);
+        return serverRequest.rebootRequest(request);
     }
 
     public void setUsersMap(Map<String, String> usersMap) {
@@ -44,7 +41,7 @@ public class ServerEngine {
     }
 
     public Request registerConnection(Request request) {
-        return serverRequests.registerRequest(request);
+        return serverRequest.registerRequest(request);
     }
 
     public Request addUserConnection(Request request) {
@@ -52,8 +49,22 @@ public class ServerEngine {
         String password = request.getCommand().getMenuOptions()[1];
         if (usersMap.get(username) == null) {
             usersMap.put(username, password);
-            return serverRequests.mainRequest(request);
+            return serverRequest.mainRequest(request);
         }
-        return serverRequests.registerRequest(request);
+        return serverRequest.registerRequest(request);
+    }
+
+    public Request uploadFileConnection(Request request) {
+        String fileName = request.getTrack().getTrackData();
+        serverFileManager.uploadFile(fileName);
+        return serverRequest.mainRequest(request);
+    }
+
+    public Request serverFileConnection(Request request) {
+        return serverRequest.serverFileRequest(request);
+    }
+
+    public Request downloadConnection(Request request) {
+        return serverRequest.downloadFileRequest(request);
     }
 }

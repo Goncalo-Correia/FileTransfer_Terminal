@@ -1,6 +1,7 @@
 package org.musicsource.codezillas.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
@@ -9,8 +10,12 @@ import org.musicsource.codezillas.connection.commands.CommandType;
 public class ClientEngine {
 
     private Prompt prompt;
+    private ClientRequest clientRequest;
+    private ClientFileManager clientFileManager;
 
     public ClientEngine() {
+        clientRequest = new ClientRequest();
+        clientFileManager = new ClientFileManager();
     }
 
     public void setPrompt(Prompt prompt) {
@@ -21,16 +26,10 @@ public class ClientEngine {
         Request request = new Request();
        switch (option) {
            case 1:
-               request.setRequestType(RequestType.COMMAND);
-               Command command = new Command();
-               command.setCommandType(CommandType.LOGIN);
-               request.setCommand(command);
+               request = clientRequest.loginRequest();
                break;
            case 2:
-               request.setRequestType(RequestType.COMMAND);
-               Command command1 = new Command();
-               command1.setCommandType(CommandType.REGISTER);
-               request.setCommand(command1);
+               request = clientRequest.registerRequest();
                break;
            case 3:
                System.exit(0);
@@ -40,42 +39,25 @@ public class ClientEngine {
     }
 
     public Request validateConnection(String[] client) {
-        Request request = new Request();
-        request.setRequestType(RequestType.COMMAND);
-        Command command = new Command();
-        command.setCommandType(CommandType.CREDENTIALS);
-        command.setMenuOptions(client);
-        request.setCommand(command);
-        return request;
+        return clientRequest.validateRequest(client);
     }
 
     public Request mainConnection(Integer mainOption) {
         Request request = null;
         switch (mainOption) {
             case 1:
-                request.setRequestType(RequestType.COMMAND);
-                Command command = new Command();
-                command.setCommandType(CommandType.UPDATE);
-                request.setCommand(command);
+                request = clientRequest.updateRequest();
                 break;
             case 2:
-                request.setRequestType(RequestType.COMMAND);
-
-                Command command1 = new Command();
-                command1.setCommandType(CommandType.UPLOAD);
-                request.setCommand(command1);
+                Integer selectedFile = createMenu(clientFileManager.listClientFilesForFolder());
+                String files = clientFileManager.clientFiles(selectedFile);
+                request = clientRequest.uploadRequest(files);
                 break;
             case 3:
-                request.setRequestType(RequestType.COMMAND);
-                Command command2 = new Command();
-                command2.setCommandType(CommandType.DOWNLOAD);
-                request.setCommand(command2);
+                request = clientRequest.downloadRequest();
                 break;
             case 4:
-                request.setRequestType(RequestType.COMMAND);
-                Command command3 = new Command();
-                command3.setCommandType(CommandType.QUIT);
-                request.setCommand(command3);
+                request = clientRequest.quitRequest();
                 break;
         }
         return request;
@@ -89,6 +71,12 @@ public class ClientEngine {
         command.setMenuOptions(registerOptions);
         request.setCommand(command);
         return request;
+    }
+
+    private Integer createMenu(String[] files) {
+        MenuInputScanner menuScanner = new MenuInputScanner(files);
+        menuScanner.setMessage("Client personal files: ");
+        return prompt.getUserInput(menuScanner);
     }
 
 }
