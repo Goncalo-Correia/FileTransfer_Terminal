@@ -4,6 +4,7 @@ import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -100,10 +101,11 @@ public class Server {
         public void run() {
             System.out.println(Messages.CLIENT_CONNECTED);
             clientCommunication();
+            shutdown();
         }
 
         private void clientCommunication() {
-            while (serverSocket.isBound()) {
+            while (socket.isBound()) {
                 Request request = receiveConnection();
 
                 Request newRequest = handleConnection(request);
@@ -118,9 +120,11 @@ public class Server {
 
             try {
                 object = inputStream.readObject();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (EOFException ex) {
+                System.out.println(Thread.currentThread().getName() + " Client disconnected");
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -144,6 +148,14 @@ public class Server {
             try {
                 outputStream.writeObject(request);
                 outputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void shutdown() {
+            try {
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

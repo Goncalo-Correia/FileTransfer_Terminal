@@ -46,7 +46,7 @@ public class ClientEngine {
         Request request = null;
         switch (mainOption) {
             case 1:
-                request = clientRequest.updateRequest();
+                request = clientRequest.backToMainRequest();
                 break;
             case 2:
                 Integer selectedFile = createMenu(clientFileManager.listClientFilesForFolder());
@@ -54,13 +54,22 @@ public class ClientEngine {
                 request = clientRequest.uploadRequest(files);
                 break;
             case 3:
-                request = clientRequest.downloadRequest();
+                request = clientRequest.serverFilesRequest();
                 break;
             case 4:
                 request = clientRequest.quitRequest();
                 break;
         }
         return request;
+    }
+
+    public Request serverFilesConnection(String fileName) {
+        return clientRequest.downloadRequest(fileName);
+    }
+
+    public Request downloadRequest(String fileName) {
+        clientFileManager.downloadFile(fileName);
+        return clientRequest.backToMainRequest();
     }
 
     public Request newUserConnection(String[] registerOptions) {

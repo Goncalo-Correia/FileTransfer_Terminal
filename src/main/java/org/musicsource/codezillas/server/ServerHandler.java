@@ -68,7 +68,8 @@ public class ServerHandler {
             case ADD_USER:
                 newRequest = serverEngine.addUserConnection(request);
                 break;
-            case MAIN:
+            case REBOOT:
+                newRequest = serverEngine.mainConnection(request);
                 break;
             case UPDATE:
                 break;

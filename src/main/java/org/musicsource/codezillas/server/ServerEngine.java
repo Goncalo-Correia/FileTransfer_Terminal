@@ -54,6 +54,10 @@ public class ServerEngine {
         return serverRequest.registerRequest(request);
     }
 
+    public Request mainConnection(Request request) {
+        return serverRequest.mainRequest(request);
+    }
+
     public Request uploadFileConnection(Request request) {
         String fileName = request.getTrack().getTrackData();
         serverFileManager.uploadFile(fileName);

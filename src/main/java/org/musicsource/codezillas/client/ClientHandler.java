@@ -80,9 +80,11 @@ public class ClientHandler {
         switch (request.getCommand().getCommandType()) {
             case SERVER_FILES:
                 Integer selectedFile = createMenu(request);
-
+                String fileName = request.getCommand().getMenuOptions()[selectedFile - 1];
+                newRequest = clientEngine.serverFilesConnection(fileName);
                 break;
             case DOWNLOAD:
+                newRequest = clientEngine.downloadRequest(request.getCommand().getMessage());
                 break;
         }
         return newRequest;

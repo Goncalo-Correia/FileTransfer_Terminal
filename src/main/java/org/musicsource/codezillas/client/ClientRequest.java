@@ -57,7 +57,7 @@ public class ClientRequest {
         return request;
     }
 
-    public Request downloadRequest() {
+    public Request serverFilesRequest() {
         Request request = new Request();
         request.setRequestType(RequestType.DOWNLOAD);
         Command command = new Command();
@@ -66,11 +66,30 @@ public class ClientRequest {
         return request;
     }
 
+    public Request downloadRequest(String fileName) {
+        Request request = new Request();
+        request.setRequestType(RequestType.DOWNLOAD);
+        Command command = new Command();
+        command.setCommandType(CommandType.DOWNLOAD);
+        command.setMessage(fileName);
+        request.setCommand(command);
+        return request;
+    }
+
+    public Request backToMainRequest() {
+        Request request = new Request();
+        request.setRequestType(RequestType.COMMAND);
+        Command command = new Command();
+        command.setCommandType(CommandType.REBOOT);
+        request.setCommand(command);
+        return request;
+    }
+
     public Request quitRequest() {
         Request request = new Request();
         request.setRequestType(RequestType.COMMAND);
         Command command = new Command();
-        command.setCommandType(CommandType.QUIT);
+        command.setCommandType(CommandType.INIT);
         request.setCommand(command);
         return request;
     }

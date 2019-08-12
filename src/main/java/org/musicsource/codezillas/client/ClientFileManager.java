@@ -1,10 +1,12 @@
 package org.musicsource.codezillas.client;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ClientFileManager {
 
     private final File folder = new File("src/main/clientData");
+    private final String path = "src/main/clientData";
 
     public ClientFileManager() {
     }
@@ -29,6 +31,16 @@ public class ClientFileManager {
             index++;
         }
         return fileInfo;
+    }
+
+    public void downloadFile(String fileName) {
+        File fileData = new File(path + "/" + fileName);
+        //fileData.mkdir();
+        try {
+            fileData.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

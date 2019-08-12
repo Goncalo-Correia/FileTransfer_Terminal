@@ -23,11 +23,22 @@ public class ServerFileManager {
 
     public void uploadFile(String string) {
         File fileData = new File(standard + "/" + string);
-        fileData.mkdir();
+        //fileData.mkdir();
         try {
             fileData.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String downloadFile(String string) {
+        String[] serverFiles = listServerFilesForFolder();
+        String requestedFile = "";
+        for (String file : serverFiles) {
+            if (file.equals(string)) {
+                requestedFile = file;
+            }
+        }
+        return requestedFile;
     }
 }

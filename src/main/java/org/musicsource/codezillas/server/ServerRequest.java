@@ -77,7 +77,12 @@ public class ServerRequest {
     }
 
     public Request downloadFileRequest(Request request) {
-        return null;
+        request.setRequestType(RequestType.DOWNLOAD);
+        Command command = new Command();
+        command.setCommandType(CommandType.DOWNLOAD);
+        command.setMessage(serverFileManager.downloadFile(request.getCommand().getMessage()));
+        request.setCommand(command);
+        return request;
     }
 
 }
