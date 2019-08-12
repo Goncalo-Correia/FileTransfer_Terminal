@@ -12,16 +12,16 @@ public class ClientFileManager {
     }
 
     public String[] listClientFilesForFolder() {
-        String[] fileNames = new String[folder.listFiles().length];
+        String[] clientFileNames = new String[folder.listFiles().length];
         int index = 0;
         for (File fileEntry : folder.listFiles()) {
-            fileNames[index] = fileEntry.getName();
+            clientFileNames[index] = fileEntry.getName();
             index++;
         }
-        return fileNames;
+        return clientFileNames;
     }
 
-    public String clientFiles(Integer selectedFile) {
+    public String uploadFile(Integer selectedFile) {
         int index = 0;
         String fileInfo = "";
         for (File fileEntry : folder.listFiles()) {

@@ -9,10 +9,10 @@ public class ClientHandler {
 
     private Request request;
     private Prompt prompt;
-    private ClientEngine clientEngine;
+    private ClientConnection clientConnection;
 
     public ClientHandler() {
-        clientEngine = new ClientEngine();
+        clientConnection = new ClientConnection();
     }
 
     public void setRequest(Request request) {
@@ -21,7 +21,7 @@ public class ClientHandler {
 
     public void setPrompt(Prompt prompt) {
         this.prompt = prompt;
-        clientEngine.setPrompt(prompt);
+        clientConnection.setPrompt(prompt);
     }
 
     public Request handleConnection() {
@@ -45,19 +45,19 @@ public class ClientHandler {
             case INIT:
             case REBOOT:
                 Integer initOption = createMenu(request);
-                newRequest = clientEngine.initConnection(initOption);
+                newRequest = clientConnection.initConnection(initOption);
                 break;
             case VALIDATE:
                 String[] client = stringMenu(request);
-                newRequest = clientEngine.validateConnection(client);
+                newRequest = clientConnection.validateConnection(client);
                 break;
             case MAIN:
                 Integer mainOption = createMenu(request);
-                newRequest = clientEngine.mainConnection(mainOption);
+                newRequest = clientConnection.mainConnection(mainOption);
                 break;
             case NEW_USER:
                 String[] register = stringMenu(request);
-                newRequest = clientEngine.newUserConnection(register);
+                newRequest = clientConnection.newUserConnection(register);
                 break;
             case UPDATE:
                 break;
@@ -81,10 +81,10 @@ public class ClientHandler {
             case SERVER_FILES:
                 Integer selectedFile = createMenu(request);
                 String fileName = request.getCommand().getMenuOptions()[selectedFile - 1];
-                newRequest = clientEngine.serverFilesConnection(fileName);
+                newRequest = clientConnection.serverFilesConnection(fileName);
                 break;
             case DOWNLOAD:
-                newRequest = clientEngine.downloadRequest(request.getCommand().getMessage());
+                newRequest = clientConnection.downloadRequest(request.getCommand().getMessage());
                 break;
         }
         return newRequest;

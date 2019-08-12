@@ -5,14 +5,14 @@ import org.musicsource.codezillas.connection.Request;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServerEngine {
+public class ServerConnection {
 
     private Map<String,String> usersMap;
     private ServerService serverService;
     private ServerRequest serverRequest;
     private ServerFileManager serverFileManager;
 
-    public ServerEngine() {
+    public ServerConnection() {
         usersMap = new HashMap<>();
         serverService = new ServerService();
         serverRequest = new ServerRequest();

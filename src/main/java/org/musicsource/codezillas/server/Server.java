@@ -23,7 +23,7 @@ public class Server {
     private Map<Integer, ConnectionHandler> connectionHandlerMap;
     private Map<String, String> usersMap;
     private Integer clientCount;
-    private ServerEngine serverEngine;
+    private ServerConnection serverConnection;
 
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
@@ -31,7 +31,7 @@ public class Server {
         usersMap = Collections.synchronizedMap(new HashMap<String, String>());
         usersMap.put("goncalo","ginasio1");
         clientCount = 0;
-        serverEngine = new ServerEngine();
+        serverConnection = new ServerConnection();
     }
 
     public void init() {
@@ -50,7 +50,7 @@ public class Server {
 
                 Socket socket = serverSocket.accept();
                 clientCount++;
-                ConnectionHandler clientHandler = new ConnectionHandler(socket, serverEngine, usersMap);
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, serverConnection, usersMap);
 
                 connectionHandlerMap.put(clientCount, clientHandler);
 
@@ -76,12 +76,12 @@ public class Server {
         private ObjectInputStream inputStream;
         private ObjectOutputStream outputStream;
         private ServerHandler serverHandler;
-        private ServerEngine serverEngine;
+        private ServerConnection serverConnection;
         private Map<String, String> userMap;
 
-        public ConnectionHandler(Socket socket, ServerEngine serverEngine, Map userMap) {
+        public ConnectionHandler(Socket socket, ServerConnection serverConnection, Map userMap) {
             this.socket = socket;
-            this.serverEngine = serverEngine;
+            this.serverConnection = serverConnection;
             setupStreams();
             serverHandler = new ServerHandler();
             this.userMap = userMap;
@@ -138,7 +138,7 @@ public class Server {
 
             serverHandler.setRequest(request);
             serverHandler.setUsersMap(usersMap);
-            serverHandler.setServerEngine(serverEngine);
+            serverHandler.setServerConnection(serverConnection);
 
             return serverHandler.handleConnection();
         }

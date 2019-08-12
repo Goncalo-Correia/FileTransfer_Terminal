@@ -36,6 +36,16 @@ public class ClientRequest {
         return request;
     }
 
+    public Request newUserRequest(String[] registerOptions) {
+        Request request = new Request();
+        request.setRequestType(RequestType.COMMAND);
+        Command command = new Command();
+        command.setCommandType(CommandType.ADD_USER);
+        command.setMenuOptions(registerOptions);
+        request.setCommand(command);
+        return request;
+    }
+
     public Request updateRequest() {
         Request request = new Request();
         request.setRequestType(RequestType.COMMAND);

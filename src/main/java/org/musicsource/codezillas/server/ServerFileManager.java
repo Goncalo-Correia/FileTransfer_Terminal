@@ -6,19 +6,19 @@ import java.io.IOException;
 public class ServerFileManager {
 
     private final File folder = new File("src/main/serverData");
-    private String standard = "src/main/serverData";
+    private final String standard = "src/main/serverData";
 
     public ServerFileManager() {
     }
 
     public String[] listServerFilesForFolder() {
-        String[] fileNames = new String[folder.listFiles().length];
+        String[] serverFileNames = new String[folder.listFiles().length];
         int index = 0;
         for (File fileEntry : folder.listFiles()) {
-            fileNames[index] = fileEntry.getName();
+            serverFileNames[index] = fileEntry.getName();
             index++;
         }
-        return fileNames;
+        return serverFileNames;
     }
 
     public void uploadFile(String string) {

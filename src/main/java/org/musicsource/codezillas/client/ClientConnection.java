@@ -3,17 +3,14 @@ package org.musicsource.codezillas.client;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.musicsource.codezillas.connection.Request;
-import org.musicsource.codezillas.connection.RequestType;
-import org.musicsource.codezillas.connection.commands.Command;
-import org.musicsource.codezillas.connection.commands.CommandType;
 
-public class ClientEngine {
+public class ClientConnection {
 
     private Prompt prompt;
     private ClientRequest clientRequest;
     private ClientFileManager clientFileManager;
 
-    public ClientEngine() {
+    public ClientConnection() {
         clientRequest = new ClientRequest();
         clientFileManager = new ClientFileManager();
     }
@@ -50,7 +47,7 @@ public class ClientEngine {
                 break;
             case 2:
                 Integer selectedFile = createMenu(clientFileManager.listClientFilesForFolder());
-                String files = clientFileManager.clientFiles(selectedFile);
+                String files = clientFileManager.uploadFile(selectedFile);
                 request = clientRequest.uploadRequest(files);
                 break;
             case 3:
@@ -73,13 +70,7 @@ public class ClientEngine {
     }
 
     public Request newUserConnection(String[] registerOptions) {
-        Request request = new Request();
-        request.setRequestType(RequestType.COMMAND);
-        Command command = new Command();
-        command.setCommandType(CommandType.ADD_USER);
-        command.setMenuOptions(registerOptions);
-        request.setCommand(command);
-        return request;
+        return clientRequest.newUserRequest(registerOptions);
     }
 
     private Integer createMenu(String[] files) {

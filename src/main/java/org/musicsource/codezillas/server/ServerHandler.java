@@ -8,7 +8,7 @@ import java.util.Map;
 public class ServerHandler {
 
     private Request request;
-    private ServerEngine serverEngine;
+    private ServerConnection serverConnection;
     private Map<String, String> usersMap;
 
     public ServerHandler() {
@@ -18,9 +18,9 @@ public class ServerHandler {
         this.request = request;
     }
 
-    public void setServerEngine(ServerEngine serverEngine) {
-        this.serverEngine = serverEngine;
-        serverEngine.setUsersMap(usersMap);
+    public void setServerConnection(ServerConnection serverConnection) {
+        this.serverConnection = serverConnection;
+        serverConnection.setUsersMap(usersMap);
     }
 
     public void setUsersMap(Map<String, String> usersMap) {
@@ -46,7 +46,7 @@ public class ServerHandler {
     }
 
     private Request boot() {
-        return serverEngine.initRequest();
+        return serverConnection.initRequest();
     }
 
     private Request command() {
@@ -54,22 +54,22 @@ public class ServerHandler {
         Request newRequest = new Request();
         switch (commandType) {
             case INIT:
-                newRequest = serverEngine.initRequest();
+                newRequest = serverConnection.initRequest();
                 break;
             case LOGIN:
-                newRequest = serverEngine.loginConnection(request);
+                newRequest = serverConnection.loginConnection(request);
                 break;
             case CREDENTIALS:
-                newRequest = serverEngine.credentialsConnection(request);
+                newRequest = serverConnection.credentialsConnection(request);
                 break;
             case REGISTER:
-                newRequest = serverEngine.registerConnection(request);
+                newRequest = serverConnection.registerConnection(request);
                 break;
             case ADD_USER:
-                newRequest = serverEngine.addUserConnection(request);
+                newRequest = serverConnection.addUserConnection(request);
                 break;
             case REBOOT:
-                newRequest = serverEngine.mainConnection(request);
+                newRequest = serverConnection.mainConnection(request);
                 break;
             case UPDATE:
                 break;
@@ -84,17 +84,17 @@ public class ServerHandler {
     }
 
     private Request upload() {
-        return serverEngine.uploadFileConnection(request);
+        return serverConnection.uploadFileConnection(request);
     }
 
     private Request download() {
         Request downloadRequest = new Request();
         switch (request.getCommand().getCommandType()) {
             case SERVER_FILES:
-                downloadRequest = serverEngine.serverFileConnection(request);
+                downloadRequest = serverConnection.serverFileConnection(request);
                 break;
             case DOWNLOAD:
-                downloadRequest = serverEngine.downloadConnection(request);
+                downloadRequest = serverConnection.downloadConnection(request);
                 break;
         }
         return downloadRequest;
