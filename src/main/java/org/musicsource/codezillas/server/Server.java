@@ -23,7 +23,6 @@ public class Server {
     private Map<Integer, ConnectionHandler> connectionHandlerMap;
     private Map<String, String> usersMap;
     private Integer clientCount;
-    private ServerConnection serverConnection;
 
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
@@ -31,7 +30,6 @@ public class Server {
         usersMap = Collections.synchronizedMap(new HashMap<String, String>());
         usersMap.put("goncalo","ginasio1");
         clientCount = 0;
-        serverConnection = new ServerConnection();
     }
 
     public void init() {
@@ -50,7 +48,7 @@ public class Server {
 
                 Socket socket = serverSocket.accept();
                 clientCount++;
-                ConnectionHandler clientHandler = new ConnectionHandler(socket, serverConnection, usersMap);
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, usersMap);
 
                 connectionHandlerMap.put(clientCount, clientHandler);
 
@@ -79,9 +77,9 @@ public class Server {
         private ServerConnection serverConnection;
         private Map<String, String> userMap;
 
-        public ConnectionHandler(Socket socket, ServerConnection serverConnection, Map userMap) {
+        public ConnectionHandler(Socket socket, Map userMap) {
             this.socket = socket;
-            this.serverConnection = serverConnection;
+            serverConnection = new ServerConnection(socket);
             setupStreams();
             serverHandler = new ServerHandler();
             this.userMap = userMap;

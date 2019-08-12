@@ -2,13 +2,26 @@ package org.musicsource.codezillas.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public class ServerFileManager {
 
     private final File folder = new File("src/main/serverData");
-    private final String standard = "src/main/serverData";
+    private final String path = "src/main/serverData";
+    private Socket socket;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
 
-    public ServerFileManager() {
+    public ServerFileManager(Socket socket) {
+        try {
+            inputStream = new ObjectInputStream(socket.getInputStream());
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.socket = socket;
     }
 
     public String[] listServerFilesForFolder() {
@@ -22,7 +35,7 @@ public class ServerFileManager {
     }
 
     public void uploadFile(String string) {
-        File fileData = new File(standard + "/" + string);
+        File fileData = new File(path + "/" + string);
         //fileData.mkdir();
         try {
             fileData.createNewFile();

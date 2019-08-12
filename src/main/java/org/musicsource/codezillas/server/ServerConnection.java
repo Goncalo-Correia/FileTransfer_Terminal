@@ -2,6 +2,7 @@ package org.musicsource.codezillas.server;
 
 import org.musicsource.codezillas.connection.Request;
 
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,12 +12,14 @@ public class ServerConnection {
     private ServerService serverService;
     private ServerRequest serverRequest;
     private ServerFileManager serverFileManager;
+    private Socket socket;
 
-    public ServerConnection() {
+    public ServerConnection(Socket socket) {
+        this.socket = socket;
         usersMap = new HashMap<>();
         serverService = new ServerService();
         serverRequest = new ServerRequest();
-        serverFileManager = new ServerFileManager();
+        serverFileManager = new ServerFileManager(socket);
     }
 
     public Request initRequest() {
