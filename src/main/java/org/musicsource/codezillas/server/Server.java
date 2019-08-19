@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,11 +120,14 @@ public class Server {
             try {
                 object = inputStream.readObject();
             } catch (EOFException ex) {
+                ex.getMessage();
                 System.out.println(Thread.currentThread().getName() + " Client disconnected");
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                e.getMessage();
+                System.out.println(Thread.currentThread().getName() + " Client disconnected");
             } catch (IOException e) {
-                e.printStackTrace();
+                e.getMessage();
+                System.out.println(Thread.currentThread().getName() + " Client disconnected");
             }
 
             if (object instanceof Request) {

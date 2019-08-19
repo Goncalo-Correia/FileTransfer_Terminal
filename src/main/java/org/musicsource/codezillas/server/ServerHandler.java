@@ -72,12 +72,7 @@ public class ServerHandler {
                 newRequest = serverConnection.mainConnection(request);
                 break;
             case UPDATE:
-                break;
-            case UPLOAD:
-                break;
-            case DOWNLOAD:
-                break;
-            case QUIT:
+                newRequest = serverConnection.updateConnection(request);
                 break;
         }
         return newRequest;

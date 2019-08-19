@@ -34,6 +34,16 @@ public class ServerFileManager {
         return serverFileNames;
     }
 
+    public String serverFilesString() {
+        String[] serverFiles = listServerFilesForFolder();
+        String wrapper = "\n";
+        String result = "";
+        for (String file : serverFiles) {
+            result += file + wrapper;
+        }
+        return result;
+    }
+
     public void uploadFile(String string) {
         File fileData = new File(path + "/" + string);
         //fileData.mkdir();

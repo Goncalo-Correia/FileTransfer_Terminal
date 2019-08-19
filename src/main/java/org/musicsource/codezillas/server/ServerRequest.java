@@ -41,8 +41,18 @@ public class ServerRequest {
         Command command = new Command();
         command.setCommandType(CommandType.MAIN);
         command.setMessage("Client Profile: ");
-        String[] client = new String[] {"Client Info","Upload","Download","Quit"};
+        String[] client = new String[]{"Available Files","Upload","Download","Quit"};
         command.setMenuOptions(client);
+        request.setCommand(command);
+        return request;
+    }
+
+    public Request updateRequest(Request request) {
+        request.setRequestType(RequestType.COMMAND);
+        Command command = new Command();
+        command.setCommandType(CommandType.UPDATE);
+        command.setMessage(serverFileManager.serverFilesString());
+        command.setMenuOptions(new String[]{"Back"});
         request.setCommand(command);
         return request;
     }
