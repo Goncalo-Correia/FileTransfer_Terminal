@@ -29,9 +29,6 @@ public class ClientHandler {
             case COMMAND:
                 request = command();
                 break;
-            case UPLOAD:
-                upload();
-                break;
             case DOWNLOAD:
                 request = download();
                 break;
@@ -60,19 +57,11 @@ public class ClientHandler {
                 newRequest = clientConnection.newUserConnection(register);
                 break;
             case UPDATE:
-                break;
-            case UPLOAD:
-                break;
-            case DOWNLOAD:
-                break;
-            case QUIT:
+                Integer back = createMenu(request);
+                newRequest = clientConnection.updateConnection();
                 break;
         }
         return newRequest;
-    }
-
-    private void upload() {
-
     }
 
     private Request download() {

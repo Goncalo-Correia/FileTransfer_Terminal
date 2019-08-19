@@ -43,7 +43,7 @@ public class ClientConnection {
         Request request = null;
         switch (mainOption) {
             case 1:
-                request = clientRequest.backToMainRequest();
+                request = clientRequest.availableFiles();
                 break;
             case 2:
                 Integer selectedFile = createMenu(clientFileManager.listClientFilesForFolder());
@@ -58,6 +58,10 @@ public class ClientConnection {
                 break;
         }
         return request;
+    }
+
+    public Request updateConnection() {
+        return clientRequest.backToMainRequest();
     }
 
     public Request serverFilesConnection(String fileName) {

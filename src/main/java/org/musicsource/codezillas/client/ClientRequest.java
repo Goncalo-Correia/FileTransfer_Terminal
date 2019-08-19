@@ -46,7 +46,7 @@ public class ClientRequest {
         return request;
     }
 
-    public Request updateRequest() {
+    public Request availableFiles() {
         Request request = new Request();
         request.setRequestType(RequestType.COMMAND);
         Command command = new Command();

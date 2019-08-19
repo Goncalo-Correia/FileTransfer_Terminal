@@ -58,6 +58,10 @@ public class ServerConnection {
         return serverRequest.mainRequest(request);
     }
 
+    public Request updateConnection(Request request) {
+        return serverRequest.updateRequest(request);
+    }
+
     public Request uploadFileConnection(Request request) {
         String fileName = request.getTrack().getTrackData();
         serverFileManager.uploadFile(fileName);
