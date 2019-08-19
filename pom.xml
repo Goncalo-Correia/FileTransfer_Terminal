@@ -102,37 +102,45 @@
                     <target>9</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>2.4.1</version>
                 <executions>
                     <execution>
+                        <id>build-first</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.musicsource.codezillas.ServerMain</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>musicSourceServer.jar</finalName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build-second</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.musicsource.codezillas.ClientMain</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>musicSourceClient.jar</finalName>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <transformers>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>org.musicsource.codezillas.ServerMain</mainClass>
-                        </transformer>
-
-                        <!-- Make sure multiple persistence jars do not override exiting persistence -->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                            <resource>META-INF/spring.handlers</resource>
-                        </transformer>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                            <resource>META-INF/spring.schemas</resource>
-                        </transformer>
-
-                    </transformers>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                </configuration>
             </plugin>
+
         </plugins>
     </build>
 
