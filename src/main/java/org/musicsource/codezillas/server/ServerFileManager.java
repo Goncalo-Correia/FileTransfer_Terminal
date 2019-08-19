@@ -7,8 +7,10 @@ public class ServerFileManager {
 
     private final File folder = new File("src/main/serverData");
     private final String path = "src/main/serverData";
+    private String fileName;
 
     public ServerFileManager() {
+        fileName = "";
     }
 
     public String[] listServerFilesForFolder() {
@@ -46,14 +48,33 @@ public class ServerFileManager {
         }
     }
 
-    public String downloadFile(String string) {
-        String[] serverFiles = listServerFilesForFolder();
-        String requestedFile = "";
-        for (String file : serverFiles) {
-            if (file.equals(string)) {
-                requestedFile = file;
+    public byte[] downloadFile(String string) {
+        File file = null;
+        byte[] data = null;
+
+        for (File fileEntry : folder.listFiles()) {
+            if (fileEntry.getName().equals(string)) {
+                file = fileEntry;
+                fileName = fileEntry.getName();
             }
         }
-        return requestedFile;
+
+        if (file != null){
+
+            try {
+
+                FileInputStream reader = new FileInputStream(file);
+                data = reader.readAllBytes();
+
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return data;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 }

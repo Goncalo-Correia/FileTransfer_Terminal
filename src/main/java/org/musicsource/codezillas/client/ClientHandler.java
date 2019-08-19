@@ -75,7 +75,7 @@ public class ClientHandler {
                 newRequest = clientConnection.serverFilesConnection(fileName);
                 break;
             case DOWNLOAD:
-                newRequest = clientConnection.downloadRequest(request.getCommand().getMessage());
+                newRequest = clientConnection.downloadRequest(request.getTrack().getTrackData(), request.getTrack().getFileName());
                 break;
         }
         return newRequest;

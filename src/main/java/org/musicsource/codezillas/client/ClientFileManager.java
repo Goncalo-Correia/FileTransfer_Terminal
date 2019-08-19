@@ -50,10 +50,15 @@ public class ClientFileManager {
         return data;
     }
 
-    public void downloadFile(String fileName) {
-        File fileData = new File(path + "/" + fileName);
+    public void downloadFile(byte[] fileData, String fileName) {
+        File file = new File(path + "/" + fileName);
+
+        System.out.println("Download is starting...");
+
         try {
-            fileData.createNewFile();
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file.getPath());
+            out.write(fileData);
         } catch (IOException e) {
             e.printStackTrace();
         }

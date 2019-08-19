@@ -4,6 +4,7 @@ import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
 import org.musicsource.codezillas.connection.commands.CommandType;
+import org.musicsource.codezillas.server.persistence.models.Track;
 
 public class ServerRequest {
 
@@ -90,8 +91,11 @@ public class ServerRequest {
         request.setRequestType(RequestType.DOWNLOAD);
         Command command = new Command();
         command.setCommandType(CommandType.DOWNLOAD);
-        command.setMessage(serverFileManager.downloadFile(request.getCommand().getMessage()));
+        Track track = new Track();
+        track.setTrackData(serverFileManager.downloadFile(request.getCommand().getMessage()));
+        track.setFileName(serverFileManager.getFileName());
         request.setCommand(command);
+        request.setTrack(track);
         return request;
     }
 

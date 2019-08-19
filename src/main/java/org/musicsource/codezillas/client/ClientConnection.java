@@ -71,8 +71,8 @@ public class ClientConnection {
         return clientRequest.downloadRequest(fileName);
     }
 
-    public Request downloadRequest(String fileName) {
-        clientFileManager.downloadFile(fileName);
+    public Request downloadRequest(byte[] fileData, String fileName) {
+        clientFileManager.downloadFile(fileData, fileName);
         return clientRequest.backToMainRequest();
     }
 
