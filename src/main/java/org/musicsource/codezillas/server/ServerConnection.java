@@ -12,14 +12,12 @@ public class ServerConnection {
     private ServerService serverService;
     private ServerRequest serverRequest;
     private ServerFileManager serverFileManager;
-    private Socket socket;
 
     public ServerConnection(Socket socket) {
-        this.socket = socket;
         usersMap = new HashMap<>();
         serverService = new ServerService();
         serverRequest = new ServerRequest();
-        serverFileManager = new ServerFileManager(socket);
+        serverFileManager = new ServerFileManager();
     }
 
     public Request initRequest() {
@@ -66,8 +64,9 @@ public class ServerConnection {
     }
 
     public Request uploadFileConnection(Request request) {
-        String fileName = request.getTrack().getTrackData();
-        serverFileManager.uploadFile(fileName);
+        byte[] fileData = request.getTrack().getTrackData();
+        String fileName = request.getTrack().getFileName();
+        serverFileManager.uploadFile(fileData, fileName);
         return serverRequest.mainRequest(request);
     }
 

@@ -4,6 +4,8 @@ import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.musicsource.codezillas.connection.Request;
 
+import java.net.Socket;
+
 public class ClientConnection {
 
     private Prompt prompt;
@@ -47,8 +49,9 @@ public class ClientConnection {
                 break;
             case 2:
                 Integer selectedFile = createMenu(clientFileManager.listClientFilesForFolder());
-                String files = clientFileManager.uploadFile(selectedFile);
-                request = clientRequest.uploadRequest(files);
+                byte[] files = clientFileManager.uploadFile(selectedFile);
+                String fileName = clientFileManager.getFileName();
+                request = clientRequest.uploadRequest(files, fileName);
                 break;
             case 3:
                 request = clientRequest.serverFilesRequest();

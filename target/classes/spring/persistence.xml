@@ -5,10 +5,10 @@
 
     <import resource="persistence/persistence-dev.xml"/>
 
-    <bean id="userDao" class="org.musicsource.codezillas.server.persistence.daos.jpa.JpaUserDao">
+    <bean id="userDao" class="org.musicsource.codezillas.server.persistence.daos.daoImpl.UserDao">
     </bean>
 
-    <bean id="trackDao" class="org.musicsource.codezillas.server.persistence.daos.jpa.JpaTrackDao">
+    <bean id="trackDao" class="org.musicsource.codezillas.server.persistence.daos.daoImpl.TrackDao">
     </bean>
 
 </beans>

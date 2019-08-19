@@ -7,7 +7,8 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Track extends AbstractModel {
 
-    private String trackData;
+    private byte[] trackData;
+    private String fileName;
 
     @ManyToOne
     private User user;
@@ -15,12 +16,20 @@ public class Track extends AbstractModel {
     public Track() {
     }
 
-    public String getTrackData() {
+    public byte[] getTrackData() {
         return trackData;
     }
 
-    public void setTrackData(String trackData) {
+    public void setTrackData(byte[] trackData) {
         this.trackData = trackData;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public User getUser() {

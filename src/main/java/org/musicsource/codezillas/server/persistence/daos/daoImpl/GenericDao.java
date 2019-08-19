@@ -1,4 +1,4 @@
-package org.musicsource.codezillas.server.persistence.daos.jpa;
+package org.musicsource.codezillas.server.persistence.daos.daoImpl;
 
 import org.musicsource.codezillas.server.persistence.daos.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +9,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public abstract class GenericJpaDao<T> implements Dao<T> {
+public abstract class GenericDao<T> implements Dao<T> {
 
     protected Class<T> modelType;
 
     @PersistenceContext
     private EntityManager em;
 
-    public GenericJpaDao(Class<T> modelType) {
+    public GenericDao(Class<T> modelType) {
         this.modelType = modelType;
     }
 

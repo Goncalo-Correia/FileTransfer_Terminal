@@ -55,7 +55,7 @@ public class ClientRequest {
         return request;
     }
 
-    public Request uploadRequest(String fileInfo) {
+    public Request uploadRequest(byte[] fileInfo, String fileName) {
         Request request = new Request();
         request.setRequestType(RequestType.UPLOAD);
         Command command = new Command();
@@ -63,6 +63,7 @@ public class ClientRequest {
         request.setCommand(command);
         Track track = new Track();
         track.setTrackData(fileInfo);
+        track.setFileName(fileName);
         request.setTrack(track);
         return request;
     }

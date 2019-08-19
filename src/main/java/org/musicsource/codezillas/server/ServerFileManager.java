@@ -1,27 +1,14 @@
 package org.musicsource.codezillas.server;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class ServerFileManager {
 
     private final File folder = new File("src/main/serverData");
     private final String path = "src/main/serverData";
-    private Socket socket;
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
 
-    public ServerFileManager(Socket socket) {
-        try {
-            inputStream = new ObjectInputStream(socket.getInputStream());
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.socket = socket;
+    public ServerFileManager() {
     }
 
     public String[] listServerFilesForFolder() {
@@ -44,13 +31,18 @@ public class ServerFileManager {
         return result;
     }
 
-    public void uploadFile(String string) {
-        File fileData = new File(path + "/" + string);
-        //fileData.mkdir();
+    public void uploadFile(byte[] fileData, String fileName) {
+        File file = new File(path + "/" + fileName);
+
+        System.out.println("Download is starting...");
+
         try {
-            fileData.createNewFile();
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file.getPath());
+            out.write(fileData);
+
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 

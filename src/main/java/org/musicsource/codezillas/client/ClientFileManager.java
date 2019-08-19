@@ -1,14 +1,16 @@
 package org.musicsource.codezillas.client;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 
 public class ClientFileManager {
 
     private final File folder = new File("src/main/clientData");
     private final String path = "src/main/clientData";
+    private String fileName;
 
     public ClientFileManager() {
+        fileName = "";
     }
 
     public String[] listClientFilesForFolder() {
@@ -21,21 +23,35 @@ public class ClientFileManager {
         return clientFileNames;
     }
 
-    public String uploadFile(Integer selectedFile) {
+    public byte[] uploadFile(Integer selectedFile) {
         int index = 0;
-        String fileInfo = "";
+        File file = null;
+        byte[] data = null;
+
         for (File fileEntry : folder.listFiles()) {
             if (index == selectedFile - 1) {
-                fileInfo = fileEntry.getName();
+                fileName = fileEntry.getName();
+                file = fileEntry;
             }
             index++;
         }
-        return fileInfo;
+
+        if (file != null){
+
+            try {
+
+                FileInputStream reader = new FileInputStream(file);
+                data = reader.readAllBytes();
+
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return data;
     }
 
     public void downloadFile(String fileName) {
         File fileData = new File(path + "/" + fileName);
-        //fileData.mkdir();
         try {
             fileData.createNewFile();
         } catch (IOException e) {
@@ -43,4 +59,7 @@ public class ClientFileManager {
         }
     }
 
+    public String getFileName() {
+        return fileName;
+    }
 }

@@ -5,6 +5,8 @@ import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.connection.Request;
 
+import java.net.Socket;
+
 public class ClientHandler {
 
     private Request request;
