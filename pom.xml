@@ -7,6 +7,7 @@
     <groupId>org.musicsource.codezillas</groupId>
     <artifactId>musicsource</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <dependencies>
 
@@ -28,8 +29,8 @@
             <groupId>org.academiadecodigo.bootcamp</groupId>
             <artifactId>prompt-view</artifactId>
             <version>0.2.1-SNAPSHOT</version>
-            <!--<scope>system</scope>
-            <systemPath>
+            <scope>system</scope>
+            <!--<systemPath>
                 C:/Users/thirt/.m2/repository/org/academiadecodigo/bootcamp/prompt-view/0.2.1-SNAPSHOT/prompt-view-0.2.1-SNAPSHOT.jar
             </systemPath>-->
 

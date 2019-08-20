@@ -5,12 +5,13 @@ import java.net.Socket;
 
 public class ClientFileManager {
 
-    private final File folder = new File("src/main/clientData");
-    private final String path = "src/main/clientData";
+    private final File folder = new File("C:\\MusicSourceClient");
+    private final String path = "C:\\MusicSourceClient";
     private String fileName;
 
     public ClientFileManager() {
         fileName = "";
+        initClientDirectory();
     }
 
     public String[] listClientFilesForFolder() {
@@ -61,6 +62,12 @@ public class ClientFileManager {
             out.write(fileData);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void initClientDirectory() {
+        if (!folder.exists()) {
+            folder.mkdir();
         }
     }
 
