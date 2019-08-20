@@ -2,6 +2,7 @@ package org.musicsource.codezillas.server;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Path;
 
 public class ServerFileManager {
 
@@ -11,7 +12,7 @@ public class ServerFileManager {
 
     public ServerFileManager() {
         fileName = "";
-        initServerDirectory();;
+        initServerDirectory();
     }
 
     public String[] listServerFilesForFolder() {
