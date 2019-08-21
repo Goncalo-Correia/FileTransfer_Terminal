@@ -6,8 +6,8 @@ import java.nio.file.Path;
 
 public class ServerFileManager {
 
-    private final File folder = new File("C:\\MusicSourceServer");
-    private final String path = "C:\\MusicSourceServer";
+    private final File folder = new File("C:\\Directory1");
+    private final String path = "C:\\Directory1";
     private String fileName;
 
     public ServerFileManager() {
@@ -78,6 +78,7 @@ public class ServerFileManager {
 
     private void initServerDirectory() {
         if (!folder.exists()) {
+            System.out.println("Created directory");
             folder.mkdir();
         }
     }

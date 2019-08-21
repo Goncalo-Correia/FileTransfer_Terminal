@@ -5,8 +5,8 @@ import java.net.Socket;
 
 public class ClientFileManager {
 
-    private final File folder = new File("C:\\MusicSourceClient");
-    private final String path = "C:\\MusicSourceClient";
+    private final File folder = new File("C:\\Directory2");
+    private final String path = "C:\\Directory2";
     private String fileName;
 
     public ClientFileManager() {
@@ -67,6 +67,7 @@ public class ClientFileManager {
 
     private void initClientDirectory() {
         if (!folder.exists()) {
+            System.out.println("Created directory");
             folder.mkdir();
         }
     }
