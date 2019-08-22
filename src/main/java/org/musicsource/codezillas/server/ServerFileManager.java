@@ -6,8 +6,10 @@ import java.nio.file.Path;
 
 public class ServerFileManager {
 
-    private final File folder = new File("C:\\Directory1");
-    private final String path = "C:\\Directory1";
+    private final File folder = new File("~/Directory1");
+    private final String path = "~/Directory1";
+    //private final File folder = new File("src/main/SERVER");
+    //private final String path = "src/main/SERVER";
     private String fileName;
 
     public ServerFileManager() {

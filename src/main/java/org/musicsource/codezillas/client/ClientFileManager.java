@@ -7,6 +7,8 @@ public class ClientFileManager {
 
     private final File folder = new File("C:\\Directory2");
     private final String path = "C:\\Directory2";
+    //private final File folder = new File("src/main/CLIENT");
+    //private final String path = "src/main/CLIENT";
     private String fileName;
 
     public ClientFileManager() {

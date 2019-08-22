@@ -1,5 +1,8 @@
 package org.musicsource.codezillas.server;
 
+import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
+import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.utils.Defaults;
 import org.musicsource.codezillas.utils.Messages;
@@ -13,6 +16,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,6 +28,8 @@ public class Server {
     private Map<Integer, ConnectionHandler> connectionHandlerMap;
     private Map<String, String> usersMap;
     private Integer clientCount;
+    private Prompt prompt;
+    private boolean connected;
 
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
@@ -31,19 +37,42 @@ public class Server {
         usersMap = Collections.synchronizedMap(new HashMap<String, String>());
         usersMap.put("goncalo","ginasio1");
         clientCount = 0;
+        prompt = new Prompt(System.in, System.out);
+    }
+
+    public void control() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                StringInputScanner scanner = new StringInputScanner();
+                scanner.setMessage("Close Server Message: shutdown\n\n\n");
+
+                String option = prompt.getUserInput(scanner);
+                if (option.equals("shutdown")) {
+                    try {
+                        connected = false;
+                        serverSocket.close();
+                        System.exit(0);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
     public void init() {
         try {
             System.out.println(Messages.BOOT_SERVER);
             serverSocket = new ServerSocket(Defaults.SERVER_PORT);
+            connected = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void start() {
-        while (serverSocket.isBound()) {
+        while (connected) {
             try {
                 System.out.println(Messages.WAIT_CONNECTION);
 
@@ -55,7 +84,7 @@ public class Server {
 
                 cachedPool.submit(clientHandler);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("closing server");
             }
         }
     }

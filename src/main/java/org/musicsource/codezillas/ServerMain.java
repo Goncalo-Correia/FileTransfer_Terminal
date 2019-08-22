@@ -8,6 +8,7 @@ public class ServerMain {
 
         Server server = new Server();
 
+        server.control();
         server.init();
         server.start();
         server.shutdown();
