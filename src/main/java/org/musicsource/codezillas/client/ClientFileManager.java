@@ -2,16 +2,17 @@ package org.musicsource.codezillas.client;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientFileManager {
 
     private final String pathPrefix = "/Users/";
     private final String pathSuffix = "/SourceCLIENT";
     private String userRoot;
-    private final File folder = new File(pathBuilder(userRoot));
+    private final File folder = new File(pathBuilder("codecadet"));
     private String fileName;
 
     public ClientFileManager() {
@@ -19,21 +20,45 @@ public class ClientFileManager {
     }
 
     public String[] listClientFilesForFolder() {
-
-        if (folder.listFiles() == null) {
-            return new String[]{"Back"};
+        /*int size = folder.listFiles().length;
+        if (size == 0) {
+            size = 1;
         }
-
-        String[] clientFileNames = new String[folder.listFiles().length];
+        System.out.println("enter");
+        String[] clientFileNames = new String[size];
         int index = 1;
 
         clientFileNames[0] = "Back";
-        for (File fileEntry : folder.listFiles()) {
+        for (File fileEntry : folder.getAbsoluteFile().listFiles()) {
             clientFileNames[index] = fileEntry.getName();
+            System.out.println("in loop");
             index++;
         }
+        System.out.println("out");
+        return clientFileNames;*/
+        final List<Path> pathsToFiles = new ArrayList<>();
 
-        return clientFileNames;
+        try {
+            Files.walkFileTree(folder.toPath(), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (Files.isRegularFile(file)) {
+                        pathsToFiles.add(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String[] arr = new String[pathsToFiles.toArray().length];
+        int index = 0;
+        for (Object obj : pathsToFiles.toArray()) {
+            String str = obj.toString().split("/")[4];
+            arr[index] = str;
+            index++;
+        }
+        return arr;
     }
 
     public byte[] uploadFile(Integer selectedFile) {

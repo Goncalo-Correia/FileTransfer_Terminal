@@ -1,16 +1,17 @@
 package org.musicsource.codezillas.server;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerFileManager {
 
     private final String pathPrefix = "/Users/";
     private final String pathSuffix = "/SourceSERVER";
     private String userRoot;
-    private final File folder = new File(pathBuilder(userRoot));
+    private final File folder = new File(pathBuilder("codecadet"));
     private String fileName;
 
     public ServerFileManager() {
@@ -19,11 +20,7 @@ public class ServerFileManager {
 
     public String[] listServerFilesForFolder() {
 
-        if (folder.listFiles() == null) {
-            return new String[]{"Back"};
-        }
-
-        String[] serverFileNames = new String[folder.listFiles().length];
+        /*String[] serverFileNames = new String[folder.listFiles().length];
         int index = 1;
 
         serverFileNames[0] = "Back";
@@ -32,7 +29,30 @@ public class ServerFileManager {
             index++;
         }
 
-        return serverFileNames;
+        return serverFileNames;*/
+        final List<Path> pathsToFiles = new ArrayList<>();
+
+        try {
+            Files.walkFileTree(folder.toPath(), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (Files.isRegularFile(file)) {
+                        pathsToFiles.add(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String[] arr = new String[pathsToFiles.toArray().length];
+        int index = 0;
+        for (Object obj : pathsToFiles.toArray()) {
+            String str = obj.toString().split("/")[4];
+            arr[index] = str;
+            index++;
+        }
+        return arr;
     }
 
     public String serverFilesString() {
