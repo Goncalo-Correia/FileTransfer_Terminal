@@ -1,5 +1,7 @@
 package org.musicsource.codezillas.client;
 
+import org.musicsource.codezillas.generic.AbstractFileManager;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.*;
@@ -7,7 +9,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientFileManager {
+public class ClientFileManager extends AbstractFileManager {
 
     private final String pathPrefix = "/Users/";
     private final String pathSuffix = "/SourceCLIENT";
@@ -20,46 +22,7 @@ public class ClientFileManager {
     }
 
     public String[] listClientFilesForFolder() {
-        /*int size = folder.listFiles().length;
-        if (size == 0) {
-            size = 1;
-        }
-        System.out.println("enter");
-        String[] clientFileNames = new String[size];
-        int index = 1;
-
-        clientFileNames[0] = "Back";
-        for (File fileEntry : folder.getAbsoluteFile().listFiles()) {
-            clientFileNames[index] = fileEntry.getName();
-            System.out.println("in loop");
-            index++;
-        }
-        System.out.println("out");
-        return clientFileNames;*/
-        final List<Path> pathsToFiles = new ArrayList<>();
-
-        try {
-            Files.walkFileTree(folder.toPath(), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (Files.isRegularFile(file)) {
-                        pathsToFiles.add(file);
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String[] arr = new String[pathsToFiles.toArray().length + 1];
-        arr[0] = "Back";
-        int index = 1;
-        for (Object obj : pathsToFiles.toArray()) {
-            String str = obj.toString().split("/")[4];
-            arr[index] = str;
-            index++;
-        }
-        return arr;
+        return super.listClientFilesForFolder(folder);
     }
 
     public byte[] uploadFile(Integer selectedFile) {
@@ -79,6 +42,8 @@ public class ClientFileManager {
 
             try {
 
+                System.out.println("Uploading...");
+
                 FileInputStream reader = new FileInputStream(file);
                 data = reader.readAllBytes();
 
@@ -92,7 +57,7 @@ public class ClientFileManager {
     public void downloadFile(byte[] fileData, String fileName) {
         File file = new File(pathBuilder(userRoot) + "/" + fileName);
 
-        System.out.println("Download is starting...");
+        System.out.println("Downloading...");
 
         try {
             file.createNewFile();
@@ -112,9 +77,9 @@ public class ClientFileManager {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Directory created");
+            System.out.println("Root directory created");
         } else {
-            System.out.println("Directory already exists");
+            System.out.println("Root directory already exists");
         }
     }
 

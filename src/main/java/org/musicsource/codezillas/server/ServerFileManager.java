@@ -1,59 +1,29 @@
 package org.musicsource.codezillas.server;
 
+import org.musicsource.codezillas.generic.AbstractFileManager;
+
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerFileManager {
+public class ServerFileManager extends AbstractFileManager {
 
     private final String pathPrefix = "/Users/";
     private final String pathSuffix = "/SourceSERVER";
     private String userRoot;
-    private final File folder = new File(pathBuilder("codecadet"));
+    private File folder;
     private String fileName;
 
-    public ServerFileManager() {
-        fileName = "";
+    public ServerFileManager(String userRoot) {
+        this.fileName = "";
+        this.userRoot = userRoot;
+        this.folder = new File(pathBuilder(this.userRoot));
     }
 
     public String[] listServerFilesForFolder() {
-
-        /*String[] serverFileNames = new String[folder.listFiles().length];
-        int index = 1;
-
-        serverFileNames[0] = "Back";
-        for (File fileEntry : folder.listFiles()) {
-            serverFileNames[index] = fileEntry.getName();
-            index++;
-        }
-
-        return serverFileNames;*/
-        final List<Path> pathsToFiles = new ArrayList<>();
-
-        try {
-            Files.walkFileTree(folder.toPath(), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (Files.isRegularFile(file)) {
-                        pathsToFiles.add(file);
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String[] arr = new String[pathsToFiles.toArray().length + 1];
-        arr[0] = "Back";
-        int index = 1;
-        for (Object obj : pathsToFiles.toArray()) {
-            String str = obj.toString().split("/")[4];
-            arr[index] = str;
-            index++;
-        }
-        return arr;
+        return super.listClientFilesForFolder(folder);
     }
 
     public String serverFilesString() {
@@ -67,9 +37,9 @@ public class ServerFileManager {
     }
 
     public void uploadFile(byte[] fileData, String fileName) {
-        File file = new File(pathBuilder("codecadet") + "/" + fileName);
+        File file = new File(pathBuilder(userRoot) + "/" + fileName);
 
-        System.out.println("Download is starting...");
+        System.out.println("<UPLOAD>");
 
         try {
             file.createNewFile();
@@ -84,6 +54,8 @@ public class ServerFileManager {
     public byte[] downloadFile(String string) {
         File file = null;
         byte[] data = null;
+
+        System.out.println("<DOWNLOAD>");
 
         for (File fileEntry : folder.listFiles()) {
             if (fileEntry.getName().equals(string)) {
@@ -118,9 +90,9 @@ public class ServerFileManager {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Directory created");
+            System.out.println("\nServer directory created");
         } else {
-            System.out.println("Directory already exists");
+            System.out.println("\nServer directory already exists");
         }
     }
 

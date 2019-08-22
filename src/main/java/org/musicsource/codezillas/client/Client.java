@@ -49,7 +49,6 @@ public class Client {
 
     public void init() {
         try {
-            System.out.println(Messages.BOOT_CLIENT);
             String host = bootHost();
             Integer port = bootPort();
             socket = new Socket(host, port);
@@ -60,7 +59,7 @@ public class Client {
     }
 
     private void setupStreams() throws IOException {
-        System.out.println(Messages.CLIENT_STREAMS);
+        System.out.println("\n" + Messages.CLIENT_STREAMS);
         outputStream = new ObjectOutputStream(socket.getOutputStream());
         inputStream = new ObjectInputStream(socket.getInputStream());
     }
@@ -134,19 +133,19 @@ public class Client {
 
     private Integer bootPort() {
         IntegerInputScanner intScanner = new IntegerInputScanner();
-        intScanner.setMessage("Enter port: ");
+        intScanner.setMessage("\nConnecting SERVER port: ");
         return prompt.getUserInput(intScanner);
     }
 
     private String bootHost(){
         StringInputScanner strScanner = new StringInputScanner();
-        strScanner.setMessage("Enter host address: ");
+        strScanner.setMessage("\nSERVER IP or 'localhost'\nCLIENT host address: ");
         return prompt.getUserInput(strScanner);
     }
 
     private String bootDirectory() {
         StringInputScanner strScanner = new StringInputScanner();
-        strScanner.setMessage("Enter PC user root: ");
+        strScanner.setMessage("\n'INFO: computer username'\nCLIENT root name: ");
         return prompt.getUserInput(strScanner);
     }
 }

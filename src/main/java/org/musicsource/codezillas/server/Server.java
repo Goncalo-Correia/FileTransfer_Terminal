@@ -106,13 +106,13 @@ public class Server {
     private Integer bootController() {
         System.out.println("Starting boot controller...");
         IntegerInputScanner scanner = new IntegerInputScanner();
-        scanner.setMessage("Select server port: ");
+        scanner.setMessage("SERVER port: ");
         return prompt.getUserInput(scanner);
     }
 
     private String bootMenu() {
         StringInputScanner strScanner = new StringInputScanner();
-        strScanner.setMessage("Enter PC user root: ");
+        strScanner.setMessage("SERVER root name: ");
         return prompt.getUserInput(strScanner);
     }
 
@@ -135,13 +135,12 @@ public class Server {
             this.userRoot = userRoot;
             serverConnection = new ServerConnection();
             serverHandler = new ServerHandler();
-            serverFileManager = new ServerFileManager();
+            serverFileManager = new ServerFileManager(this.userRoot);
             serverRequest = new ServerRequest();
             //serverService = new ServerService();
         }
 
         private void wire() {
-            serverFileManager.setUserRoot(userRoot);
             serverFileManager.initServerDirectory();
 
             serverRequest.setServerFileManager(serverFileManager);
