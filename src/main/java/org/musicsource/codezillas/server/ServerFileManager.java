@@ -1,18 +1,14 @@
 package org.musicsource.codezillas.server;
 
-import org.academiadecodigo.bootcamp.Prompt;
-import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
-
 import java.io.*;
-import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ServerFileManager {
 
-    private final String pathPrefix = "C:\\Users\\";
-    private final String pathSuffix = "\\Desktop\\SourceSERVER";
+    private final String pathPrefix = "/Users/";
+    private final String pathSuffix = "/SourceSERVER";
     private String userRoot;
     private final File folder = new File(pathBuilder(userRoot));
     private String fileName;
@@ -22,12 +18,20 @@ public class ServerFileManager {
     }
 
     public String[] listServerFilesForFolder() {
+
+        if (folder.listFiles() == null) {
+            return new String[]{"Back"};
+        }
+
         String[] serverFileNames = new String[folder.listFiles().length];
-        int index = 0;
+        int index = 1;
+
+        serverFileNames[0] = "Back";
         for (File fileEntry : folder.listFiles()) {
             serverFileNames[index] = fileEntry.getName();
             index++;
         }
+
         return serverFileNames;
     }
 

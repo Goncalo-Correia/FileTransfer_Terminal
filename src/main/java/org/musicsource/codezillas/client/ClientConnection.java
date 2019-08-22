@@ -48,6 +48,10 @@ public class ClientConnection {
                 break;
             case 2:
                 Integer selectedFile = createMenu(clientFileManager.listClientFilesForFolder());
+                if (selectedFile == 1) {
+                    return clientRequest.backToMainRequest();
+                }
+
                 byte[] files = clientFileManager.uploadFile(selectedFile);
                 String fileName = clientFileManager.getFileName();
                 request = clientRequest.uploadRequest(files, fileName);
@@ -77,6 +81,10 @@ public class ClientConnection {
 
     public Request newUserConnection(String[] registerOptions) {
         return clientRequest.newUserRequest(registerOptions);
+    }
+
+    public Request backToMainConnection() {
+        return clientRequest.backToMainRequest();
     }
 
     private Integer createMenu(String[] files) {

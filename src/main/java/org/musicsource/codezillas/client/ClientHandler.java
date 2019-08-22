@@ -68,6 +68,10 @@ public class ClientHandler {
         switch (request.getCommand().getCommandType()) {
             case SERVER_FILES:
                 Integer selectedFile = createMenu(request);
+                if (selectedFile == 1) {
+                    return clientConnection.backToMainConnection();
+                }
+
                 String fileName = request.getCommand().getMenuOptions()[selectedFile - 1];
                 newRequest = clientConnection.serverFilesConnection(fileName);
                 break;

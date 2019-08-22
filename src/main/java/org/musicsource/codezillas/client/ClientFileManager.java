@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 
 public class ClientFileManager {
 
-    private final String pathPrefix = "C:\\Users\\";
-    private final String pathSuffix = "\\Desktop\\SourceCLIENT";
+    private final String pathPrefix = "/Users/";
+    private final String pathSuffix = "/SourceCLIENT";
     private String userRoot;
     private final File folder = new File(pathBuilder(userRoot));
     private String fileName;
@@ -19,12 +19,20 @@ public class ClientFileManager {
     }
 
     public String[] listClientFilesForFolder() {
+
+        if (folder.listFiles() == null) {
+            return new String[]{"Back"};
+        }
+
         String[] clientFileNames = new String[folder.listFiles().length];
-        int index = 0;
+        int index = 1;
+
+        clientFileNames[0] = "Back";
         for (File fileEntry : folder.listFiles()) {
             clientFileNames[index] = fileEntry.getName();
             index++;
         }
+
         return clientFileNames;
     }
 
@@ -71,7 +79,6 @@ public class ClientFileManager {
 
     public void initClientDirectory() {
         Path createPath = Paths.get(pathBuilder(userRoot));
-        System.out.println(createPath.toAbsolutePath().toString());
         if (!Files.exists(createPath)) {
 
             try {
