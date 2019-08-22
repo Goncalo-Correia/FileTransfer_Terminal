@@ -3,6 +3,7 @@
 /Users/codecadet/repos/MusicSource/src/main/java/org/musicsource/codezillas/connection/commands/Command.java
 /Users/codecadet/repos/MusicSource/src/main/java/org/musicsource/codezillas/server/persistence/daos/daoImpl/GenericDao.java
 /Users/codecadet/repos/MusicSource/src/main/java/org/musicsource/codezillas/utils/Messages.java
+/Users/codecadet/repos/MusicSource/src/main/java/org/musicsource/codezillas/generic/AbstractFileManager.java
 /Users/codecadet/repos/MusicSource/src/main/java/org/musicsource/codezillas/server/ServerHandler.java
 /Users/codecadet/repos/MusicSource/src/main/java/org/musicsource/codezillas/server/services/TrackServiceImpl.java
 /Users/codecadet/repos/MusicSource/src/main/java/org/musicsource/codezillas/server/persistence/models/Track.java
