@@ -51,8 +51,9 @@ public class ClientFileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String[] arr = new String[pathsToFiles.toArray().length];
-        int index = 0;
+        String[] arr = new String[pathsToFiles.toArray().length + 1];
+        arr[0] = "Back";
+        int index = 1;
         for (Object obj : pathsToFiles.toArray()) {
             String str = obj.toString().split("/")[4];
             arr[index] = str;
@@ -62,7 +63,7 @@ public class ClientFileManager {
     }
 
     public byte[] uploadFile(Integer selectedFile) {
-        int index = 0;
+        int index = 1;
         File file = null;
         byte[] data = null;
 
