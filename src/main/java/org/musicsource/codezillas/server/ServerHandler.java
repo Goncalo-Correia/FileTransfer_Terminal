@@ -20,7 +20,6 @@ public class ServerHandler {
 
     public void setServerConnection(ServerConnection serverConnection) {
         this.serverConnection = serverConnection;
-        serverConnection.setUsersMap(usersMap);
     }
 
     public void setUsersMap(Map<String, String> usersMap) {

@@ -1,6 +1,8 @@
 package org.musicsource.codezillas.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
+import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.connection.RequestType;
 import org.musicsource.codezillas.connection.commands.Command;
@@ -19,18 +21,38 @@ public class Client {
     private ObjectInputStream inputStream;
     private Prompt prompt;
     private ClientHandler clientHandler;
+    private ClientConnection clientConnection;
+    private ClientFileManager clientFileManager;
+    private ClientRequest clientRequest;
     private Request request;
 
     public Client(Prompt prompt) {
         this.prompt = prompt;
         clientHandler = new ClientHandler();
+        clientConnection = new ClientConnection();
+        clientFileManager = new ClientFileManager();
+        clientRequest = new ClientRequest();
         request = new Request();
+    }
+
+    public void wire() {
+        String userRoot = bootDirectory();
+        clientFileManager.setUserRoot(userRoot);
+        clientFileManager.initClientDirectory();
+
+        clientConnection.setPrompt(prompt);
+        clientConnection.setClientFileManager(clientFileManager);
+        clientConnection.setClientRequest(clientRequest);
+
+        clientHandler.setClientConnection(clientConnection);
     }
 
     public void init() {
         try {
             System.out.println(Messages.BOOT_CLIENT);
-            socket = new Socket(Defaults.LOCALHOST, Defaults.SERVER_PORT);
+            String host = bootHost();
+            Integer port = bootPort();
+            socket = new Socket(host, port);
             setupStreams();
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,5 +130,23 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Integer bootPort() {
+        IntegerInputScanner intScanner = new IntegerInputScanner();
+        intScanner.setMessage("Enter port: ");
+        return prompt.getUserInput(intScanner);
+    }
+
+    private String bootHost(){
+        StringInputScanner strScanner = new StringInputScanner();
+        strScanner.setMessage("Enter host address: ");
+        return prompt.getUserInput(strScanner);
+    }
+
+    private String bootDirectory() {
+        StringInputScanner strScanner = new StringInputScanner();
+        strScanner.setMessage("Enter PC user root: ");
+        return prompt.getUserInput(strScanner);
     }
 }

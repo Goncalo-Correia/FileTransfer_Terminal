@@ -11,7 +11,6 @@ public class ServerRequest {
     private ServerFileManager serverFileManager;
 
     public ServerRequest() {
-        serverFileManager = new ServerFileManager();
     }
 
     public Request initRequest() {
@@ -99,4 +98,7 @@ public class ServerRequest {
         return request;
     }
 
+    public void setServerFileManager(ServerFileManager serverFileManager) {
+        this.serverFileManager = serverFileManager;
+    }
 }

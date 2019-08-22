@@ -9,15 +9,11 @@ import java.util.Map;
 public class ServerConnection {
 
     private Map<String,String> usersMap;
-    private ServerService serverService;
     private ServerRequest serverRequest;
     private ServerFileManager serverFileManager;
 
-    public ServerConnection(Socket socket) {
+    public ServerConnection() {
         usersMap = new HashMap<>();
-        serverService = new ServerService();
-        serverRequest = new ServerRequest();
-        serverFileManager = new ServerFileManager();
     }
 
     public Request initRequest() {
@@ -35,10 +31,6 @@ public class ServerConnection {
             return serverRequest.mainRequest(request);
         }
         return serverRequest.rebootRequest(request);
-    }
-
-    public void setUsersMap(Map<String, String> usersMap) {
-        this.usersMap = usersMap;
     }
 
     public Request registerConnection(Request request) {
@@ -76,5 +68,17 @@ public class ServerConnection {
 
     public Request downloadConnection(Request request) {
         return serverRequest.downloadFileRequest(request);
+    }
+
+    public void setUsersMap(Map<String, String> usersMap) {
+        this.usersMap = usersMap;
+    }
+
+    public void setServerRequest(ServerRequest serverRequest) {
+        this.serverRequest = serverRequest;
+    }
+
+    public void setServerFileManager(ServerFileManager serverFileManager) {
+        this.serverFileManager = serverFileManager;
     }
 }

@@ -2,6 +2,7 @@ package org.musicsource.codezillas.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
+import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.connection.Request;
 
 import java.net.Socket;
@@ -13,8 +14,6 @@ public class ClientConnection {
     private ClientFileManager clientFileManager;
 
     public ClientConnection() {
-        clientRequest = new ClientRequest();
-        clientFileManager = new ClientFileManager();
     }
 
     public void setPrompt(Prompt prompt) {
@@ -86,4 +85,17 @@ public class ClientConnection {
         return prompt.getUserInput(menuScanner);
     }
 
+    private String bootFileManager() {
+        StringInputScanner strScanner = new StringInputScanner();
+        strScanner.setMessage("Enter PC user:");
+        return prompt.getUserInput(strScanner);
+    }
+
+    public void setClientFileManager(ClientFileManager clientFileManager) {
+        this.clientFileManager = clientFileManager;
+    }
+
+    public void setClientRequest(ClientRequest clientRequest) {
+        this.clientRequest = clientRequest;
+    }
 }

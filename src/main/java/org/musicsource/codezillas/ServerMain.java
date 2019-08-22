@@ -9,6 +9,7 @@ public class ServerMain {
         Server server = new Server();
 
         server.init();
+        server.control();
         server.start();
         server.shutdown();
     }

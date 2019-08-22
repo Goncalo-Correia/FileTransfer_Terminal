@@ -2,16 +2,20 @@ package org.musicsource.codezillas.client;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ClientFileManager {
 
-    private final File folder = new File("C:\\MusicSourceClient");
-    private final String path = "C:\\MusicSourceClient";
+    private final String pathPrefix = "C:\\Users\\";
+    private final String pathSuffix = "\\Desktop\\SourceCLIENT";
+    private String userRoot;
+    private final File folder = new File(pathBuilder(userRoot));
     private String fileName;
 
     public ClientFileManager() {
         fileName = "";
-        initClientDirectory();
     }
 
     public String[] listClientFilesForFolder() {
@@ -52,7 +56,7 @@ public class ClientFileManager {
     }
 
     public void downloadFile(byte[] fileData, String fileName) {
-        File file = new File(path + "/" + fileName);
+        File file = new File(pathBuilder(userRoot) + "/" + fileName);
 
         System.out.println("Download is starting...");
 
@@ -65,13 +69,31 @@ public class ClientFileManager {
         }
     }
 
-    private void initClientDirectory() {
-        if (!folder.exists()) {
-            folder.mkdir();
+    public void initClientDirectory() {
+        Path createPath = Paths.get(pathBuilder(userRoot));
+        System.out.println(createPath.toAbsolutePath().toString());
+        if (!Files.exists(createPath)) {
+
+            try {
+                Files.createDirectory(createPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Directory created");
+        } else {
+            System.out.println("Directory already exists");
         }
+    }
+
+    private String pathBuilder(String userRoot) {
+        return pathPrefix + userRoot + pathSuffix;
     }
 
     public String getFileName() {
         return fileName;
+    }
+
+    public void setUserRoot(String userRoot) {
+        this.userRoot = userRoot;
     }
 }
