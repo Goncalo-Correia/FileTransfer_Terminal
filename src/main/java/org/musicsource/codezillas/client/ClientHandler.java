@@ -5,7 +5,6 @@ import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.connection.Request;
 
-import java.net.Socket;
 
 public class ClientHandler {
 
@@ -14,7 +13,6 @@ public class ClientHandler {
     private ClientConnection clientConnection;
 
     public ClientHandler() {
-        clientConnection = new ClientConnection();
     }
 
     public void setRequest(Request request) {
@@ -23,7 +21,6 @@ public class ClientHandler {
 
     public void setPrompt(Prompt prompt) {
         this.prompt = prompt;
-        clientConnection.setPrompt(prompt);
     }
 
     public Request handleConnection() {
@@ -95,5 +92,9 @@ public class ClientHandler {
             answers[i] = prompt.getUserInput(stringScanner);
         }
         return answers;
+    }
+
+    public void setClientConnection(ClientConnection clientConnection) {
+        this.clientConnection = clientConnection;
     }
 }

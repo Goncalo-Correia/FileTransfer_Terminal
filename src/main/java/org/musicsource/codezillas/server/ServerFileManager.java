@@ -1,20 +1,24 @@
 package org.musicsource.codezillas.server;
 
+import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
+
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ServerFileManager {
 
-    private final File folder = new File("~/Directory1");
-    private final String path = "~/Directory1";
-    //private final File folder = new File("src/main/SERVER");
-    //private final String path = "src/main/SERVER";
+    private final String pathPrefix = "C:\\Users\\";
+    private final String pathSuffix = "\\Desktop\\SourceSERVER";
+    private String userRoot;
+    private final File folder = new File(pathBuilder(userRoot));
     private String fileName;
 
     public ServerFileManager() {
         fileName = "";
-        initServerDirectory();
     }
 
     public String[] listServerFilesForFolder() {
@@ -38,7 +42,7 @@ public class ServerFileManager {
     }
 
     public void uploadFile(byte[] fileData, String fileName) {
-        File file = new File(path + "/" + fileName);
+        File file = new File(pathBuilder(userRoot) + "/" + fileName);
 
         System.out.println("Download is starting...");
 
@@ -78,14 +82,32 @@ public class ServerFileManager {
         return data;
     }
 
-    private void initServerDirectory() {
-        if (!folder.exists()) {
-            System.out.println("Created directory");
-            folder.mkdir();
+    public void initServerDirectory() {
+
+        Path createPath = Paths.get(pathBuilder(userRoot));
+
+        if (!Files.exists(createPath.toAbsolutePath())) {
+
+            try {
+                Files.createDirectory(createPath.toAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Directory created");
+        } else {
+            System.out.println("Directory already exists");
         }
+    }
+
+    private String pathBuilder(String userRoot) {
+        return pathPrefix + userRoot + pathSuffix;
     }
 
     public String getFileName() {
         return fileName;
+    }
+
+    public void setUserRoot(String userRoot) {
+        this.userRoot = userRoot;
     }
 }

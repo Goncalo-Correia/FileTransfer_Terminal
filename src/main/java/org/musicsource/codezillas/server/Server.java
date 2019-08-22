@@ -1,6 +1,7 @@
 package org.musicsource.codezillas.server;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.connection.Request;
@@ -30,6 +31,7 @@ public class Server {
     private Integer clientCount;
     private Prompt prompt;
     private boolean connected;
+    private String userRoot;
 
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
@@ -38,6 +40,7 @@ public class Server {
         usersMap.put("goncalo","ginasio1");
         clientCount = 0;
         prompt = new Prompt(System.in, System.out);
+        userRoot = "";
     }
 
     public void control() {
@@ -63,8 +66,10 @@ public class Server {
 
     public void init() {
         try {
+            Integer serverPort = bootController();
+            userRoot = bootMenu();
             System.out.println(Messages.BOOT_SERVER);
-            serverSocket = new ServerSocket(Defaults.SERVER_PORT);
+            serverSocket = new ServerSocket(serverPort);
             connected = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,7 +83,7 @@ public class Server {
 
                 Socket socket = serverSocket.accept();
                 clientCount++;
-                ConnectionHandler clientHandler = new ConnectionHandler(socket, usersMap);
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, usersMap, userRoot);
 
                 connectionHandlerMap.put(clientCount, clientHandler);
 
@@ -98,21 +103,54 @@ public class Server {
         }
     }
 
+    private Integer bootController() {
+        System.out.println("Starting boot controller...");
+        IntegerInputScanner scanner = new IntegerInputScanner();
+        scanner.setMessage("Select server port: ");
+        return prompt.getUserInput(scanner);
+    }
+
+    private String bootMenu() {
+        StringInputScanner strScanner = new StringInputScanner();
+        strScanner.setMessage("Enter PC user root: ");
+        return prompt.getUserInput(strScanner);
+    }
+
     private class ConnectionHandler implements Runnable {
 
         private Socket socket;
         private ObjectInputStream inputStream;
         private ObjectOutputStream outputStream;
-        private ServerHandler serverHandler;
         private ServerConnection serverConnection;
-        private Map<String, String> userMap;
+        private ServerFileManager serverFileManager;
+        private ServerHandler serverHandler;
+        private ServerRequest serverRequest;
+        //private ServerService serverService;
+        //private Map<String, String> userMap;
+        private String userRoot;
 
-        public ConnectionHandler(Socket socket, Map userMap) {
+        public ConnectionHandler(Socket socket, Map userMap, String userRoot) {
             this.socket = socket;
-            serverConnection = new ServerConnection(socket);
-            setupStreams();
+            //this.userMap = userMap;
+            this.userRoot = userRoot;
+            serverConnection = new ServerConnection();
             serverHandler = new ServerHandler();
-            this.userMap = userMap;
+            serverFileManager = new ServerFileManager();
+            serverRequest = new ServerRequest();
+            //serverService = new ServerService();
+        }
+
+        private void wire() {
+            serverFileManager.setUserRoot(userRoot);
+            serverFileManager.initServerDirectory();
+
+            serverRequest.setServerFileManager(serverFileManager);
+
+            serverConnection.setUsersMap(usersMap);
+            serverConnection.setServerFileManager(serverFileManager);
+            serverConnection.setServerRequest(serverRequest);
+
+            serverHandler.setServerConnection(serverConnection);
         }
 
         private void setupStreams() {
@@ -128,6 +166,8 @@ public class Server {
         @Override
         public void run() {
             System.out.println(Messages.CLIENT_CONNECTED);
+            wire();
+            setupStreams();
             clientCommunication();
             shutdown();
         }
@@ -169,7 +209,6 @@ public class Server {
 
             serverHandler.setRequest(request);
             serverHandler.setUsersMap(usersMap);
-            serverHandler.setServerConnection(serverConnection);
 
             return serverHandler.handleConnection();
         }

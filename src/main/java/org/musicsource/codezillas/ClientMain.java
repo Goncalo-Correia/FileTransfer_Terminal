@@ -10,6 +10,7 @@ public class ClientMain {
 
         Client client = new Client(prompt);
 
+        client.wire();
         client.init();
         client.start();
         client.shutdown();

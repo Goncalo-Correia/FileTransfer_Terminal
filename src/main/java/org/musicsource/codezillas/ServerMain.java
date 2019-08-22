@@ -10,6 +10,7 @@ public class ServerMain {
 
         server.control();
         server.init();
+        server.control();
         server.start();
         server.shutdown();
     }
