@@ -135,7 +135,7 @@ public class Server {
             this.userRoot = userRoot;
             serverConnection = new ServerConnection();
             serverHandler = new ServerHandler();
-            serverFileManager = new ServerFileManager(this.userRoot);
+            serverFileManager = new ServerFileManager(userRoot);
             serverRequest = new ServerRequest();
             //serverService = new ServerService();
         }

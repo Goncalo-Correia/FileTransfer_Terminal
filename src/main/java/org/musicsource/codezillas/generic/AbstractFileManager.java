@@ -32,7 +32,7 @@ public abstract class AbstractFileManager {
         arr[0] = "Back";
         int index = 1;
         for (Object obj : pathsToFiles.toArray()) {
-            String str = obj.toString().split("/")[4];
+            String str = obj.toString().split("/")[5];
             arr[index] = str;
             index++;
         }

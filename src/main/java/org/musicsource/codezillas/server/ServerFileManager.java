@@ -11,7 +11,7 @@ import java.util.List;
 public class ServerFileManager extends AbstractFileManager {
 
     private final String pathPrefix = "/Users/";
-    private final String pathSuffix = "/SourceSERVER";
+    private final String pathSuffix = "/Desktop/SourceSERVER";
     private String userRoot;
     private File folder;
     private String fileName;
@@ -19,7 +19,7 @@ public class ServerFileManager extends AbstractFileManager {
     public ServerFileManager(String userRoot) {
         this.fileName = "";
         this.userRoot = userRoot;
-        this.folder = new File(pathBuilder(this.userRoot));
+        this.folder = new File(pathBuilder(userRoot));
     }
 
     public String[] listServerFilesForFolder() {
@@ -104,7 +104,4 @@ public class ServerFileManager extends AbstractFileManager {
         return fileName;
     }
 
-    public void setUserRoot(String userRoot) {
-        this.userRoot = userRoot;
-    }
 }

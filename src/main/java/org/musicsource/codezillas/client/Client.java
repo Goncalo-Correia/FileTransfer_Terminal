@@ -25,19 +25,21 @@ public class Client {
     private ClientFileManager clientFileManager;
     private ClientRequest clientRequest;
     private Request request;
+    private String userRoot;
 
     public Client(Prompt prompt) {
         this.prompt = prompt;
+        userRoot = bootDirectory();
         clientHandler = new ClientHandler();
         clientConnection = new ClientConnection();
-        clientFileManager = new ClientFileManager();
+        clientFileManager = new ClientFileManager(userRoot);
         clientRequest = new ClientRequest();
         request = new Request();
     }
 
     public void wire() {
-        String userRoot = bootDirectory();
-        clientFileManager.setUserRoot(userRoot);
+        //userRoot = bootDirectory();
+        //clientFileManager.setUserRoot(userRoot);
         clientFileManager.initClientDirectory();
 
         clientConnection.setPrompt(prompt);

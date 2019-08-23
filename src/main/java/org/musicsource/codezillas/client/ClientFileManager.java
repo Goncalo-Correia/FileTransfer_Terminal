@@ -12,13 +12,15 @@ import java.util.List;
 public class ClientFileManager extends AbstractFileManager {
 
     private final String pathPrefix = "/Users/";
-    private final String pathSuffix = "/SourceCLIENT";
+    private final String pathSuffix = "/Desktop/SourceCLIENT";
     private String userRoot;
-    private final File folder = new File(pathBuilder("codecadet"));
+    private File folder;
     private String fileName;
 
-    public ClientFileManager() {
+    public ClientFileManager(String userRoot) {
         fileName = "";
+        this.userRoot = userRoot;
+        this.folder = new File(pathBuilder(userRoot));
     }
 
     public String[] listClientFilesForFolder() {
@@ -91,7 +93,7 @@ public class ClientFileManager extends AbstractFileManager {
         return fileName;
     }
 
-    public void setUserRoot(String userRoot) {
-        this.userRoot = userRoot;
-    }
+    //public void setUserRoot(String userRoot) {
+    //    this.userRoot = userRoot;
+    //}
 }
