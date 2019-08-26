@@ -11,14 +11,16 @@ import java.util.List;
 
 public class ClientFileManager extends AbstractFileManager {
 
-    private final String pathPrefix = "/Users/";
-    private final String pathSuffix = "/Desktop/SourceCLIENT";
+    private String pathPrefix;
+    private String pathSuffix;
     private String userRoot;
     private File folder;
     private String fileName;
 
-    public ClientFileManager(String userRoot) {
+    public ClientFileManager(String pathPrefix, String pathSuffix, String userRoot) {
         fileName = "";
+        this.pathPrefix = pathPrefix;
+        this.pathSuffix = pathSuffix;
         this.userRoot = userRoot;
         this.folder = new File(pathBuilder(userRoot));
     }

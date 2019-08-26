@@ -2,6 +2,7 @@ package org.musicsource.codezillas.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
+import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.musicsource.codezillas.connection.Request;
 import org.musicsource.codezillas.connection.RequestType;
@@ -26,13 +27,15 @@ public class Client {
     private ClientRequest clientRequest;
     private Request request;
     private String userRoot;
+    private String[] machineType;
 
     public Client(Prompt prompt) {
         this.prompt = prompt;
         userRoot = bootDirectory();
+        machineType = bootMachine();
         clientHandler = new ClientHandler();
         clientConnection = new ClientConnection();
-        clientFileManager = new ClientFileManager(userRoot);
+        clientFileManager = new ClientFileManager(machineType[0], machineType[1], userRoot);
         clientRequest = new ClientRequest();
         request = new Request();
     }
@@ -149,5 +152,18 @@ public class Client {
         StringInputScanner strScanner = new StringInputScanner();
         strScanner.setMessage("\n'INFO: computer username'\nCLIENT root name: ");
         return prompt.getUserInput(strScanner);
+    }
+
+    private String[] bootMachine() {
+        MenuInputScanner menuScanner = new MenuInputScanner(new String[]{"MAC", "WINDOWS"});
+        menuScanner.setMessage("Select machine: ");
+
+        Integer machine = prompt.getUserInput(menuScanner);
+
+        if (machine == 1) {
+            return new String[]{"/Users/", "/Desktop/SourceClIENT"};
+        }
+
+        return new String[]{"C:\\Users\\", "\\Desktop\\SourceCLIENT"};
     }
 }
