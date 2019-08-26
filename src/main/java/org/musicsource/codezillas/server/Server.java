@@ -32,6 +32,7 @@ public class Server {
     private Prompt prompt;
     private boolean connected;
     private String userRoot;
+    private String[] machineType;
 
     public Server() {
         cachedPool = Executors.newCachedThreadPool();
@@ -41,6 +42,7 @@ public class Server {
         clientCount = 0;
         prompt = new Prompt(System.in, System.out);
         userRoot = "";
+        machineType = bootMachine();
     }
 
     public void control() {
@@ -83,7 +85,7 @@ public class Server {
 
                 Socket socket = serverSocket.accept();
                 clientCount++;
-                ConnectionHandler clientHandler = new ConnectionHandler(socket, usersMap, userRoot);
+                ConnectionHandler clientHandler = new ConnectionHandler(socket, usersMap, userRoot, machineType);
 
                 connectionHandlerMap.put(clientCount, clientHandler);
 
@@ -116,6 +118,19 @@ public class Server {
         return prompt.getUserInput(strScanner);
     }
 
+    private String[] bootMachine() {
+        MenuInputScanner menuScanner = new MenuInputScanner(new String[]{"MAC", "WINDOWS"});
+        menuScanner.setMessage("Select machine: ");
+
+        Integer machine = prompt.getUserInput(menuScanner);
+
+        if (machine == 1) {
+            return new String[]{"/Users/", "/Desktop/SourceSERVER"};
+        }
+
+        return new String[]{"C:\\Users\\", "\\Desktop\\SourceSERVER"};
+    }
+
     private class ConnectionHandler implements Runnable {
 
         private Socket socket;
@@ -128,14 +143,16 @@ public class Server {
         //private ServerService serverService;
         //private Map<String, String> userMap;
         private String userRoot;
+        private String[] machinePath;
 
-        public ConnectionHandler(Socket socket, Map userMap, String userRoot) {
+        public ConnectionHandler(Socket socket, Map userMap, String userRoot, String[] machinePath) {
             this.socket = socket;
             //this.userMap = userMap;
             this.userRoot = userRoot;
+            this.machinePath = machinePath;
             serverConnection = new ServerConnection();
             serverHandler = new ServerHandler();
-            serverFileManager = new ServerFileManager(userRoot);
+            serverFileManager = new ServerFileManager(machinePath[0], machinePath[1], userRoot);
             serverRequest = new ServerRequest();
             //serverService = new ServerService();
         }

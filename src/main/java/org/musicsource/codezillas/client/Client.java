@@ -31,8 +31,8 @@ public class Client {
 
     public Client(Prompt prompt) {
         this.prompt = prompt;
-        userRoot = bootDirectory();
         machineType = bootMachine();
+        userRoot = bootDirectory();
         clientHandler = new ClientHandler();
         clientConnection = new ClientConnection();
         clientFileManager = new ClientFileManager(machineType[0], machineType[1], userRoot);
