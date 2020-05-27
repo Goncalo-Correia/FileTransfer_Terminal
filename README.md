@@ -1,5 +1,4 @@
-# MusicSource
-
+# File Trans _ Terminal
 How to:
   
     SERVER root name = server machine User directory. ex:(MAC /Users/'server root name'/...)
